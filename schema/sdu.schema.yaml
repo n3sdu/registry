@@ -1,0 +1,68 @@
+type: object
+allOf:
+  - properties:
+      input:
+        type: object
+        additionalProperties: false
+        patternProperties:
+          # Regular entries must not start with _ and be a valid fieldSet
+          '^[^_].*$': { $ref: '#/definitions/fieldSet' }
+          # Vendor-extensions
+          '^_vnd_\w+_.*$': true
+      functional:
+        type: object
+        additionalProperties: false
+        patternProperties:
+          # Regular entries must start with _ and be a valid contractInstance
+          '^_(?!vnd_).*$': { $ref: '#/definitions/contractInstance' }
+          # Vendor-extensions
+          '^_vnd_\w+_.*$': true
+  - $ref: '#/definitions/vendorProps'
+additionalProperties: false
+definitions:
+  # Helpers for vendor-specific definitions
+  vendorProps:
+    patternProperties:
+      # vendor name: '_vnd_' + 1+ alnum/_ + '_'
+      # accept arbitrary values
+      '^_vnd_\w+_.*$': true
+  # Used for inputs, outputs
+  fieldSet:
+    type: array
+    uniqueItems: true
+    minItems: 1
+    items:
+      type: string
+      pattern: ".+" # len at least 1
+  # Used for referencing fields within the SDU
+  fieldRef:
+    type: object
+    # name of the field set can be omitted if field is unambiguous
+    required:
+      - field
+    additionalProperties: false
+    allOf:
+      - properties:
+          field:
+            type: string
+          set: # field set name
+            type: string
+      - $ref: '#/definitions/vendorProps'
+  # describes an instantiated contract to generate output
+  contractInstance:
+    type: object
+    required:
+      - contract
+      - output
+      - binding
+    additionalProperties: false
+    allOf:
+      - properties:
+          contract: { type: string }
+          output: { $ref: '#/definitions/fieldSet' }
+          binding:
+            type: object
+            additionalProperties: { $ref: '#/definitions/fieldRef' }
+          # allow arbitrary content
+          config: true
+      - $ref: '#/definitions/vendorProps'

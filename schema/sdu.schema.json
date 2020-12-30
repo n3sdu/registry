@@ -1,0 +1,102 @@
+{
+  "type": "object",
+  "allOf": [
+    {
+      "properties": {
+        "input": {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^[^_].*$": {
+              "$ref": "#/definitions/fieldSet"
+            },
+            "^_vnd_\\w+_.*$": true
+          }
+        },
+        "functional": {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^_(?!vnd_).*$": {
+              "$ref": "#/definitions/contractInstance"
+            },
+            "^_vnd_\\w+_.*$": true
+          }
+        }
+      }
+    },
+    {
+      "$ref": "#/definitions/vendorProps"
+    }
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "vendorProps": {
+      "patternProperties": {
+        "^_vnd_\\w+_.*$": true
+      }
+    },
+    "fieldSet": {
+      "type": "array",
+      "uniqueItems": true,
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": ".+"
+      }
+    },
+    "fieldRef": {
+      "type": "object",
+      "required": [
+        "field"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "properties": {
+            "field": {
+              "type": "string"
+            },
+            "set": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "$ref": "#/definitions/vendorProps"
+        }
+      ]
+    },
+    "contractInstance": {
+      "type": "object",
+      "required": [
+        "contract",
+        "output",
+        "binding"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "properties": {
+            "contract": {
+              "type": "string"
+            },
+            "output": {
+              "$ref": "#/definitions/fieldSet"
+            },
+            "binding": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/definitions/fieldRef"
+              }
+            },
+            "config": true
+          }
+        },
+        {
+          "$ref": "#/definitions/vendorProps"
+        }
+      ]
+    }
+  }
+}
