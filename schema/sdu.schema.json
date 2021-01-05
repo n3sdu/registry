@@ -67,6 +67,7 @@
         }
       ]
     },
+    "invalidAddition": true,
     "contractInstance": {
       "type": "object",
       "required": [
