@@ -17,6 +17,7 @@ allOf:
           '^_(?!vnd_).*$': { $ref: '#/definitions/contractInstance' }
           # Vendor-extensions
           '^_vnd_\w+_.*$': true
+      validation: true
   - $ref: '#/definitions/vendorProps'
 additionalProperties: false
 definitions:
