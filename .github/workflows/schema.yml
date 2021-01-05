@@ -1,0 +1,37 @@
+name: Schemas
+
+on:
+  push:
+    branches: [ master ]
+    paths: [ 'schema/**' ]
+  pull_request:
+    branches: [ master ]
+    paths: [ 'schema/**' ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: chrisdickinson/setup-yq@6b47cdfc18ce135d0a18499c5487bc8fdc0a4457
+        with:
+          yq-version: 3.4.1
+
+      - name: Make
+        run: |
+          cd "$GITHUB_WORKSPACE/schema"
+
+          # Write out current build targets' checksums
+          SUMOUT="$RUNNER_TEMP/schema-build.sum"
+          sha256sum $(make --quiet target-files) > "$SUMOUT"
+
+          # Rebuild everything
+          make clean
+          make all
+
+          # Validate checksums still match the build output
+          sha256sum -c "$SUMOUT"
