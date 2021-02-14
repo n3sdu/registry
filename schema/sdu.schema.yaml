@@ -40,8 +40,7 @@ definitions:
   fieldRef:
     type: object
     # name of the field set can be omitted if field is unambiguous
-    required:
-      - field
+    required: [ field ]
     additionalProperties: false
     allOf:
       - properties:
@@ -53,10 +52,7 @@ definitions:
   # describes an instantiated contract to generate output
   contractInstance:
     type: object
-    required:
-      - contract
-      - output
-      - binding
+    required: [ contract, output, binding ]
     additionalProperties: false
     allOf:
       - properties:
@@ -78,9 +74,7 @@ definitions:
           # PCRE pattern
           pattern: { type: string } # valid PCRE
           target: { $ref: '#/definitions/fieldRef' }
-        required:
-          - pattern
-          - target
+        required: [ pattern, target ]
       # convenience helpers
       - properties: # notEmpty: treated as .+
           notEmpty: { $ref: '#/definitions/fieldRef' }
@@ -91,7 +85,7 @@ definitions:
       - properties: # word: treated as \w+
           word: { $ref: '#/definitions/fieldRef' }
         required: [ word ]
-      - properties: # integer: treated as \d+
+      - properties: # integer: treated as [+-]?\d+
           integer: { $ref: '#/definitions/fieldRef' }
         required: [ integer ]
   # numeric predicate

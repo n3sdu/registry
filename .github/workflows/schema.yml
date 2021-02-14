@@ -17,9 +17,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: chrisdickinson/setup-yq@6b47cdfc18ce135d0a18499c5487bc8fdc0a4457
-        with:
-          yq-version: v4.5.1
+      - name: yq - portable yaml processor
+        uses: mikefarah/yq@v4.5.1
 
       - name: Make
         run: |
