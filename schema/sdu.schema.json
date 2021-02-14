@@ -237,21 +237,31 @@
     },
     "predicate": {
       "type": "object",
-      "oneOf": [
+      "allOf": [
         {
-          "$ref": "#/definitions/patternPredicate"
+          "oneOf": [
+            {
+              "$ref": "#/definitions/patternPredicate"
+            },
+            {
+              "$ref": "#/definitions/numericPredicate"
+            },
+            {
+              "$ref": "#/definitions/notPredicate"
+            },
+            {
+              "$ref": "#/definitions/allPredicate"
+            },
+            {
+              "$ref": "#/definitions/anyPredicate"
+            },
+            {
+              "$ref": "#/definitions/vendorProps"
+            }
+          ]
         },
         {
-          "$ref": "#/definitions/numericPredicate"
-        },
-        {
-          "$ref": "#/definitions/notPredicate"
-        },
-        {
-          "$ref": "#/definitions/allPredicate"
-        },
-        {
-          "$ref": "#/definitions/anyPredicate"
+          "$ref": "#/definitions/vendorProps"
         }
       ]
     },

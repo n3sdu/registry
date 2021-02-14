@@ -128,15 +128,19 @@ definitions:
         type: array
         minItems: 1
         items: { $ref: '#/definitions/predicate' }
-  # full predicate
+  # full predicate object
   predicate:
     type: object
-    oneOf:
-      - $ref: '#/definitions/patternPredicate'
-      - $ref: '#/definitions/numericPredicate'
-      - $ref: '#/definitions/notPredicate'
-      - $ref: '#/definitions/allPredicate'
-      - $ref: '#/definitions/anyPredicate'
+    allOf: # helper to allow for vendor props
+      - oneOf: # allow all predicate types
+        - $ref: '#/definitions/patternPredicate'
+        - $ref: '#/definitions/numericPredicate'
+        - $ref: '#/definitions/notPredicate'
+        - $ref: '#/definitions/allPredicate'
+        - $ref: '#/definitions/anyPredicate'
+        - $ref: '#/definitions/vendorProps'
+      - $ref: '#/definitions/vendorProps'
+  # helper for optional use
   predicateOrNull:
     oneOf:
       - $ref: '#/definitions/predicate'
