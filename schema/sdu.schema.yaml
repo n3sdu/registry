@@ -17,7 +17,8 @@ allOf:
           '^_(?!vnd_).*$': { $ref: '#/definitions/contractInstance' }
           # Vendor-extensions
           '^_vnd_\w+_.*$': true
-      validation: true
+      validation: { $ref: '#/definitions/predicateOrNull' }
+      plausibility: { $ref: '#/definitions/predicateOrNull' }
   - $ref: '#/definitions/vendorProps'
 additionalProperties: false
 definitions:
@@ -67,3 +68,82 @@ definitions:
           # allow arbitrary content
           config: true
       - $ref: '#/definitions/vendorProps'
+  # ==== predicates
+  # text pattern predicates
+  patternPredicate:
+    type: object
+    additionalProperties: false
+    oneOf:
+      - properties:
+          # PCRE pattern
+          pattern: { type: string } # valid PCRE
+          target: { $ref: '#/definitions/fieldRef' }
+        required:
+          - pattern
+          - target
+      # convenience helpers
+      - properties: # notEmpty: treated as .+
+          notEmpty: { $ref: '#/definitions/fieldRef' }
+        required: [ notEmpty ]
+      - properties: # notBlank: treated as \P{Z}+
+          notBlank: { $ref: '#/definitions/fieldRef' }
+        required: [ notBlank ]
+      - properties: # word: treated as \w+
+          word: { $ref: '#/definitions/fieldRef' }
+        required: [ word ]
+      - properties: # integer: treated as \d+
+          integer: { $ref: '#/definitions/fieldRef' }
+        required: [ integer ]
+  # numeric predicate
+  numericPredicate:
+    type: object
+    additionalProperties: false
+    required: [ value, target, relation ]
+    properties:
+      value:
+        type: number
+      target: { $ref: '#/definitions/fieldRef' }
+      relation:
+        enum: [ equal, notEqual, less, lessEqual, greater, greaterEqual ]
+  # contract predicate
+  contractPredicate:
+    type: object
+    additionalProperties: false
+    properties:
+      contract: { type: string }
+  # predicate negation
+  notPredicate:
+    type: object
+    additionalProperties: false
+    properties:
+      not: { $ref: '#/definitions/predicate' }
+  # combinations all/any
+  allPredicate:
+    type: object
+    additionalProperties: false
+    properties:
+      all:
+        type: array
+        minItems: 1
+        items: { $ref: '#/definitions/predicate' }
+  anyPredicate:
+    type: object
+    additionalProperties: false
+    properties:
+      any:
+        type: array
+        minItems: 1
+        items: { $ref: '#/definitions/predicate' }
+  # full predicate
+  predicate:
+    type: object
+    oneOf:
+      - $ref: '#/definitions/patternPredicate'
+      - $ref: '#/definitions/numericPredicate'
+      - $ref: '#/definitions/notPredicate'
+      - $ref: '#/definitions/allPredicate'
+      - $ref: '#/definitions/anyPredicate'
+  predicateOrNull:
+    oneOf:
+      - $ref: '#/definitions/predicate'
+      - type: 'null'

@@ -23,7 +23,12 @@
             "^_vnd_\\w+_.*$": true
           }
         },
-        "validation": true
+        "validation": {
+          "$ref": "#/definitions/predicateOrNull"
+        },
+        "plausibility": {
+          "$ref": "#/definitions/predicateOrNull"
+        }
       }
     },
     {
@@ -96,6 +101,167 @@
         },
         {
           "$ref": "#/definitions/vendorProps"
+        }
+      ]
+    },
+    "patternPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "pattern": {
+              "type": "string"
+            },
+            "target": {
+              "$ref": "#/definitions/fieldRef"
+            }
+          },
+          "required": [
+            "pattern",
+            "target"
+          ]
+        },
+        {
+          "properties": {
+            "notEmpty": {
+              "$ref": "#/definitions/fieldRef"
+            }
+          },
+          "required": [
+            "notEmpty"
+          ]
+        },
+        {
+          "properties": {
+            "notBlank": {
+              "$ref": "#/definitions/fieldRef"
+            }
+          },
+          "required": [
+            "notBlank"
+          ]
+        },
+        {
+          "properties": {
+            "word": {
+              "$ref": "#/definitions/fieldRef"
+            }
+          },
+          "required": [
+            "word"
+          ]
+        },
+        {
+          "properties": {
+            "integer": {
+              "$ref": "#/definitions/fieldRef"
+            }
+          },
+          "required": [
+            "integer"
+          ]
+        }
+      ]
+    },
+    "numericPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "target",
+        "relation"
+      ],
+      "properties": {
+        "value": {
+          "type": "number"
+        },
+        "target": {
+          "$ref": "#/definitions/fieldRef"
+        },
+        "relation": {
+          "enum": [
+            "equal",
+            "notEqual",
+            "less",
+            "lessEqual",
+            "greater",
+            "greaterEqual"
+          ]
+        }
+      }
+    },
+    "contractPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "contract": {
+          "type": "string"
+        }
+      }
+    },
+    "notPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "not": {
+          "$ref": "#/definitions/predicate"
+        }
+      }
+    },
+    "allPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "all": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/predicate"
+          }
+        }
+      }
+    },
+    "anyPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "any": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/predicate"
+          }
+        }
+      }
+    },
+    "predicate": {
+      "type": "object",
+      "oneOf": [
+        {
+          "$ref": "#/definitions/patternPredicate"
+        },
+        {
+          "$ref": "#/definitions/numericPredicate"
+        },
+        {
+          "$ref": "#/definitions/notPredicate"
+        },
+        {
+          "$ref": "#/definitions/allPredicate"
+        },
+        {
+          "$ref": "#/definitions/anyPredicate"
+        }
+      ]
+    },
+    "predicateOrNull": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/predicate"
+        },
+        {
+          "type": "null"
         }
       ]
     }

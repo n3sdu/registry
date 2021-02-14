@@ -19,7 +19,7 @@ jobs:
 
       - uses: chrisdickinson/setup-yq@6b47cdfc18ce135d0a18499c5487bc8fdc0a4457
         with:
-          yq-version: 3.4.1
+          yq-version: v4.5.1
 
       - name: Make
         run: |

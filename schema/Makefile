@@ -7,6 +7,8 @@ RMALL ?= $(if $(filter $(OS),Windows_NT),del /F/Q,rm -f)
 ### Definitions
 schemas = sdu.schema.json
 
+sdu_test_fail = $(wildcard test-fail/**/*.json)
+
 ### Actions
 all: $(schemas)
 
@@ -16,8 +18,11 @@ clean:
 target-files:
 	echo $(schemas)
 
-.PHONY: all clean target-files
+.PHONY: all check clean target-files
+
+check: $(schemas)
+	echo $(sdu_test_fail)
 
 %.schema.json: %.schema.yaml
-	$(YQ) -jP r $< > $@
+	$(YQ) -jP e . $< > $@
 
