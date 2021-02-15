@@ -47,19 +47,20 @@ definitions:
             type: string
       - $ref: '#/definitions/vendorProps'
   # describes an instantiated contract to generate output
-  contractInstance:
+  functionalInstance: # contract instance
     type: object
     required: [ contract, output, binding ]
     additionalProperties: false
     allOf:
       - properties:
           contract: { type: string }
+          instance: { type: string }
           output: { $ref: '#/definitions/fieldSet' }
           binding:
             type: object
             additionalProperties: { $ref: '#/definitions/fieldRef' }
-          # allow arbitrary content
-          config: true
+          priority: { type: number }
+          config: true # allow arbitrary content
       - $ref: '#/definitions/vendorProps'
   # ==== predicates
   # text pattern predicates

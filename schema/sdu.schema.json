@@ -72,7 +72,7 @@
         }
       ]
     },
-    "contractInstance": {
+    "functionalInstance": {
       "type": "object",
       "required": [
         "contract",
@@ -86,6 +86,9 @@
             "contract": {
               "type": "string"
             },
+            "instance": {
+              "type": "string"
+            },
             "output": {
               "$ref": "#/definitions/fieldSet"
             },
@@ -94,6 +97,9 @@
               "additionalProperties": {
                 "$ref": "#/definitions/fieldRef"
               }
+            },
+            "priority": {
+              "type": "number"
             },
             "config": true
           }
