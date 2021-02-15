@@ -88,14 +88,13 @@ definitions:
       - properties: # integer: treated as [+-]?\d+
           integer: { $ref: '#/definitions/fieldRef' }
         required: [ integer ]
-  # numeric predicate
-  numericPredicate:
+  # number predicate
+  numberPredicate:
     type: object
     additionalProperties: false
     required: [ value, target, relation ]
     properties:
-      value:
-        type: number
+      value: { type: number }
       target: { $ref: '#/definitions/fieldRef' }
       relation:
         enum: [ equal, notEqual, less, lessEqual, greater, greaterEqual ]
@@ -134,7 +133,7 @@ definitions:
     allOf: # helper to allow for vendor props
       - oneOf: # allow all predicate types
         - $ref: '#/definitions/patternPredicate'
-        - $ref: '#/definitions/numericPredicate'
+        - $ref: '#/definitions/numberPredicate'
         - $ref: '#/definitions/notPredicate'
         - $ref: '#/definitions/allPredicate'
         - $ref: '#/definitions/anyPredicate'

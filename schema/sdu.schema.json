@@ -164,7 +164,7 @@
         }
       ]
     },
-    "numericPredicate": {
+    "numberPredicate": {
       "type": "object",
       "additionalProperties": false,
       "required": [
@@ -244,7 +244,7 @@
               "$ref": "#/definitions/patternPredicate"
             },
             {
-              "$ref": "#/definitions/numericPredicate"
+              "$ref": "#/definitions/numberPredicate"
             },
             {
               "$ref": "#/definitions/notPredicate"
