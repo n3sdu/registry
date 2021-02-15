@@ -1,4 +1,5 @@
 {
+  "$id": "http://n3sdu.github.io/r/schema/sdu.schema.json",
   "type": "object",
   "allOf": [
     {
@@ -38,9 +39,7 @@
   "additionalProperties": false,
   "definitions": {
     "vendorProps": {
-      "patternProperties": {
-        "^_vnd_\\w+_.*$": true
-      }
+      "$ref": "common.schema.json#/definitions/vendorProps"
     },
     "fieldSet": {
       "type": "array",

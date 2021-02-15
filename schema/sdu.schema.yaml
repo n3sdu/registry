@@ -1,3 +1,4 @@
+$id: "http://n3sdu.github.io/r/schema/sdu.schema.json"
 type: object
 allOf:
   - properties:
@@ -23,11 +24,7 @@ allOf:
 additionalProperties: false
 definitions:
   # Helpers for vendor-specific definitions
-  vendorProps:
-    patternProperties:
-      # vendor name: '_vnd_' + 1+ alnum/_ + '_'
-      # accept arbitrary values
-      '^_vnd_\w+_.*$': true
+  vendorProps: { $ref: "common.schema.json#/definitions/vendorProps" }
   # Used for inputs, outputs
   fieldSet:
     type: array

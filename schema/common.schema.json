@@ -1,0 +1,10 @@
+{
+  "$id": "http://n3sdu.github.io/r/schema/common.schema.json",
+  "definitions": {
+    "vendorProps": {
+      "patternProperties": {
+        "^_vnd_\\w+_.*$": true
+      }
+    }
+  }
+}

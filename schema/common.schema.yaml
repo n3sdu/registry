@@ -1,0 +1,8 @@
+$id: "http://n3sdu.github.io/r/schema/common.schema.json"
+definitions:
+  # Helpers for vendor-specific definitions
+  vendorProps:
+    patternProperties:
+      # vendor name: '_vnd_' + 1+ alnum/_ + '_'
+      # accept arbitrary values
+      '^_vnd_\w+_.*$': true
