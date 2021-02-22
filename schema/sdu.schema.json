@@ -266,18 +266,8 @@
     "contractPredicate": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "contract",
-        "matchOutput"
-      ],
       "properties": {
         "contract": {
-          "type": "string"
-        },
-        "expected": {
-          "type": "string"
-        },
-        "matchOutput": {
           "type": "string"
         }
       }
