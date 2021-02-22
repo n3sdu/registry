@@ -1,30 +1,31 @@
 $id: "http://n3sdu.github.io/r/schema/sdu.schema.json"
 type: object
-allOf:
-  - properties:
-      input:
-        type: object
-        additionalProperties: false
-        patternProperties:
-          # Regular entries must not start with _ and be a valid fieldSet
-          '^[^_].*$': { $ref: '#/definitions/fieldSet' }
-          # Vendor-extensions
-          '^_vnd_\w+_.*$': true
-      functional:
-        type: object
-        additionalProperties: false
-        patternProperties:
-          # Regular entries must start with _ and be a valid contractInstance
-          '^_(?!vnd_).*$': { $ref: '#/definitions/contractInstance' }
-          # Vendor-extensions
-          '^_vnd_\w+_.*$': true
-      validation: { $ref: '#/definitions/predicateOrNull' }
-      plausibility: { $ref: '#/definitions/predicateOrNull' }
-  - $ref: '#/definitions/vendorProps'
-additionalProperties: false
+properties:
+  input:
+    type: object
+    patternProperties:
+      # Regular entries must not start with _ and be a valid fieldSet
+      '^[^_].*$': { $ref: '#/definitions/fieldSet' }
+    propertyNames:
+      anyOf:
+        - $ref: 'common.schema.json#/definitions/vendorProps'
+        - pattern: '^[^_].*$'
+  functional:
+    type: object
+    patternProperties:
+      # Regular entries must start with _ and be a valid functionalInstance
+      '^_(?!vnd_).*$': { $ref: '#/definitions/functionalInstance' }
+    propertyNames:
+      anyOf:
+        - $ref: 'common.schema.json#/definitions/vendorProps'
+        - pattern: '^_(?!vnd_).*$'
+  validation: { $ref: '#/definitions/predicateOrNull' }
+  plausibility: { $ref: '#/definitions/predicateOrNull' }
+propertyNames:
+  anyOf:
+    - $ref: 'common.schema.json#/definitions/vendorProps'
+    - enum: [ input, functional, validation, plausibility ]
 definitions:
-  # Helpers for vendor-specific definitions
-  vendorProps: { $ref: "common.schema.json#/definitions/vendorProps" }
   # Used for inputs, outputs
   fieldSet:
     type: array
@@ -36,41 +37,39 @@ definitions:
   # Used for referencing fields within the SDU
   fieldRef:
     type: object
-    # name of the field set can be omitted if field is unambiguous
-    required: [ field ]
-    additionalProperties: false
-    allOf:
-      - properties:
-          field:
-            type: string
-          set: # field set name
-            type: string
-      - $ref: '#/definitions/vendorProps'
+    properties:
+      field: { type: string }
+      set: { type: string } # field set name
+    required: [ field ] # name of set can be omitted if field is unambiguous
+    propertyNames:
+      anyOf:
+        - enum: [ field, set ]
+        - $ref: 'common.schema.json#/definitions/vendorProps'
   # describes an instantiated contract to generate output
   functionalInstance: # contract instance
     type: object
+    properties:
+      contract: { type: string }
+      instance: { type: string }
+      output: { $ref: '#/definitions/fieldSet' }
+      extends: { type: string }
+      binding:
+        type: object
+        additionalProperties: { $ref: '#/definitions/fieldRef' }
+      priority: { type: number }
+      config: true # allow arbitrary content
     required: [ contract, output, binding ]
-    additionalProperties: false
-    allOf:
-      - properties:
-          contract: { type: string }
-          instance: { type: string }
-          output: { $ref: '#/definitions/fieldSet' }
-          extends: { type: string }
-          binding:
-            type: object
-            additionalProperties: { $ref: '#/definitions/fieldRef' }
-          priority: { type: number }
-          config: true # allow arbitrary content
-      - $ref: '#/definitions/vendorProps'
+    propertyNames:
+      anyOf:
+        - enum: [ contract, instance, output, extends,
+                  binding, priority, config ]
+        - $ref: 'common.schema.json#/definitions/vendorProps'
   # ==== predicates
   # text pattern predicates
   patternPredicate:
     type: object
-    additionalProperties: false
     oneOf:
-      - properties:
-          # PCRE pattern
+      - properties: # default: PCRE pattern
           pattern: { type: string } # valid PCRE
           target: { $ref: '#/definitions/fieldRef' }
         required: [ pattern, target ]
@@ -87,16 +86,23 @@ definitions:
       - properties: # integer: treated as [+-]?\d+
           integer: { $ref: '#/definitions/fieldRef' }
         required: [ integer ]
+    propertyNames:
+      anyOf:
+        - enum: [ pattern, target, notEmpty, notBlank, word, integer ]
+        - $ref: 'common.schema.json#/definitions/vendorProps'
   # number predicate
   numberPredicate:
     type: object
-    additionalProperties: false
-    required: [ value, target, relation ]
     properties:
       value: { type: number }
       target: { $ref: '#/definitions/fieldRef' }
       relation:
         enum: [ equal, notEqual, less, lessEqual, greater, greaterEqual ]
+    required: [ value, target, relation ]
+    propertyNames:
+      anyOf:
+        - enum: [ value, target, relation ]
+        - $ref: 'common.schema.json#/definitions/vendorProps'
   # contract predicate
   contractPredicate:
     type: object
@@ -106,38 +112,48 @@ definitions:
   # predicate negation
   notPredicate:
     type: object
-    additionalProperties: false
     properties:
       not: { $ref: '#/definitions/predicate' }
+    required: [ not ]
+    propertyNames:
+      anyOf:
+        - enum: [ not ]
+        - $ref: 'common.schema.json#/definitions/vendorProps'
   # combinations all/any
   allPredicate:
     type: object
-    additionalProperties: false
     properties:
       all:
         type: array
         minItems: 1
         items: { $ref: '#/definitions/predicate' }
+    required: [ all ]
+    propertyNames:
+      anyOf:
+        - enum: [ all ]
+        - $ref: 'common.schema.json#/definitions/vendorProps'
   anyPredicate:
     type: object
-    additionalProperties: false
     properties:
       any:
         type: array
         minItems: 1
         items: { $ref: '#/definitions/predicate' }
+    required: [ any ]
+    propertyNames:
+      anyOf:
+        - enum: [ any ]
+        - $ref: 'common.schema.json#/definitions/vendorProps'
   # full predicate object
   predicate:
     type: object
-    allOf: # helper to allow for vendor props
-      - oneOf: # allow all predicate types
-        - $ref: '#/definitions/patternPredicate'
-        - $ref: '#/definitions/numberPredicate'
-        - $ref: '#/definitions/notPredicate'
-        - $ref: '#/definitions/allPredicate'
-        - $ref: '#/definitions/anyPredicate'
-        - $ref: '#/definitions/vendorProps'
-      - $ref: '#/definitions/vendorProps'
+    oneOf: # allow all predicate types
+      - $ref: '#/definitions/patternPredicate'
+      - $ref: '#/definitions/numberPredicate'
+      - $ref: '#/definitions/contractPredicate'
+      - $ref: '#/definitions/notPredicate'
+      - $ref: '#/definitions/allPredicate'
+      - $ref: '#/definitions/anyPredicate'
   # helper for optional use
   predicateOrNull:
     oneOf:

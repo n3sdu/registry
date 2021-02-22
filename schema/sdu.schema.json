@@ -1,46 +1,66 @@
 {
   "$id": "http://n3sdu.github.io/r/schema/sdu.schema.json",
   "type": "object",
-  "allOf": [
-    {
-      "properties": {
-        "input": {
-          "type": "object",
-          "additionalProperties": false,
-          "patternProperties": {
-            "^[^_].*$": {
-              "$ref": "#/definitions/fieldSet"
-            },
-            "^_vnd_\\w+_.*$": true
-          }
-        },
-        "functional": {
-          "type": "object",
-          "additionalProperties": false,
-          "patternProperties": {
-            "^_(?!vnd_).*$": {
-              "$ref": "#/definitions/contractInstance"
-            },
-            "^_vnd_\\w+_.*$": true
-          }
-        },
-        "validation": {
-          "$ref": "#/definitions/predicateOrNull"
-        },
-        "plausibility": {
-          "$ref": "#/definitions/predicateOrNull"
+  "properties": {
+    "input": {
+      "type": "object",
+      "patternProperties": {
+        "^[^_].*$": {
+          "$ref": "#/definitions/fieldSet"
         }
+      },
+      "propertyNames": {
+        "anyOf": [
+          {
+            "$ref": "common.schema.json#/definitions/vendorProps"
+          },
+          {
+            "pattern": "^[^_].*$"
+          }
+        ]
       }
     },
-    {
-      "$ref": "#/definitions/vendorProps"
-    }
-  ],
-  "additionalProperties": false,
-  "definitions": {
-    "vendorProps": {
-      "$ref": "common.schema.json#/definitions/vendorProps"
+    "functional": {
+      "type": "object",
+      "patternProperties": {
+        "^_(?!vnd_).*$": {
+          "$ref": "#/definitions/functionalInstance"
+        }
+      },
+      "propertyNames": {
+        "anyOf": [
+          {
+            "$ref": "common.schema.json#/definitions/vendorProps"
+          },
+          {
+            "pattern": "^_(?!vnd_).*$"
+          }
+        ]
+      }
     },
+    "validation": {
+      "$ref": "#/definitions/predicateOrNull"
+    },
+    "plausibility": {
+      "$ref": "#/definitions/predicateOrNull"
+    }
+  },
+  "propertyNames": {
+    "anyOf": [
+      {
+        "$ref": "common.schema.json#/definitions/vendorProps"
+      },
+      {
+        "enum": [
+          "input",
+          "functional",
+          "validation",
+          "plausibility"
+        ]
+      }
+    ]
+  },
+  "definitions": {
     "fieldSet": {
       "type": "array",
       "uniqueItems": true,
@@ -52,69 +72,83 @@
     },
     "fieldRef": {
       "type": "object",
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "set": {
+          "type": "string"
+        }
+      },
       "required": [
         "field"
       ],
-      "additionalProperties": false,
-      "allOf": [
-        {
-          "properties": {
-            "field": {
-              "type": "string"
-            },
-            "set": {
-              "type": "string"
-            }
+      "propertyNames": {
+        "anyOf": [
+          {
+            "enum": [
+              "field",
+              "set"
+            ]
+          },
+          {
+            "$ref": "common.schema.json#/definitions/vendorProps"
           }
-        },
-        {
-          "$ref": "#/definitions/vendorProps"
-        }
-      ]
+        ]
+      }
     },
     "functionalInstance": {
       "type": "object",
+      "properties": {
+        "contract": {
+          "type": "string"
+        },
+        "instance": {
+          "type": "string"
+        },
+        "output": {
+          "$ref": "#/definitions/fieldSet"
+        },
+        "extends": {
+          "type": "string"
+        },
+        "binding": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/fieldRef"
+          }
+        },
+        "priority": {
+          "type": "number"
+        },
+        "config": true
+      },
       "required": [
         "contract",
         "output",
         "binding"
       ],
-      "additionalProperties": false,
-      "allOf": [
-        {
-          "properties": {
-            "contract": {
-              "type": "string"
-            },
-            "instance": {
-              "type": "string"
-            },
-            "output": {
-              "$ref": "#/definitions/fieldSet"
-            },
-            "extends": {
-              "type": "string"
-            },
-            "binding": {
-              "type": "object",
-              "additionalProperties": {
-                "$ref": "#/definitions/fieldRef"
-              }
-            },
-            "priority": {
-              "type": "number"
-            },
-            "config": true
+      "propertyNames": {
+        "anyOf": [
+          {
+            "enum": [
+              "contract",
+              "instance",
+              "output",
+              "extends",
+              "binding",
+              "priority",
+              "config"
+            ]
+          },
+          {
+            "$ref": "common.schema.json#/definitions/vendorProps"
           }
-        },
-        {
-          "$ref": "#/definitions/vendorProps"
-        }
-      ]
+        ]
+      }
     },
     "patternPredicate": {
       "type": "object",
-      "additionalProperties": false,
       "oneOf": [
         {
           "properties": {
@@ -170,16 +204,27 @@
             "integer"
           ]
         }
-      ]
+      ],
+      "propertyNames": {
+        "anyOf": [
+          {
+            "enum": [
+              "pattern",
+              "target",
+              "notEmpty",
+              "notBlank",
+              "word",
+              "integer"
+            ]
+          },
+          {
+            "$ref": "common.schema.json#/definitions/vendorProps"
+          }
+        ]
+      }
     },
     "numberPredicate": {
       "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "value",
-        "target",
-        "relation"
-      ],
       "properties": {
         "value": {
           "type": "number"
@@ -197,29 +242,71 @@
             "greaterEqual"
           ]
         }
+      },
+      "required": [
+        "value",
+        "target",
+        "relation"
+      ],
+      "propertyNames": {
+        "anyOf": [
+          {
+            "enum": [
+              "value",
+              "target",
+              "relation"
+            ]
+          },
+          {
+            "$ref": "common.schema.json#/definitions/vendorProps"
+          }
+        ]
       }
     },
     "contractPredicate": {
       "type": "object",
       "additionalProperties": false,
+      "required": [
+        "contract",
+        "matchOutput"
+      ],
       "properties": {
         "contract": {
+          "type": "string"
+        },
+        "expected": {
+          "type": "string"
+        },
+        "matchOutput": {
           "type": "string"
         }
       }
     },
     "notPredicate": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "not": {
           "$ref": "#/definitions/predicate"
         }
+      },
+      "required": [
+        "not"
+      ],
+      "propertyNames": {
+        "anyOf": [
+          {
+            "enum": [
+              "not"
+            ]
+          },
+          {
+            "$ref": "common.schema.json#/definitions/vendorProps"
+          }
+        ]
       }
     },
     "allPredicate": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "all": {
           "type": "array",
@@ -228,11 +315,25 @@
             "$ref": "#/definitions/predicate"
           }
         }
+      },
+      "required": [
+        "all"
+      ],
+      "propertyNames": {
+        "anyOf": [
+          {
+            "enum": [
+              "all"
+            ]
+          },
+          {
+            "$ref": "common.schema.json#/definitions/vendorProps"
+          }
+        ]
       }
     },
     "anyPredicate": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "any": {
           "type": "array",
@@ -241,35 +342,43 @@
             "$ref": "#/definitions/predicate"
           }
         }
+      },
+      "required": [
+        "any"
+      ],
+      "propertyNames": {
+        "anyOf": [
+          {
+            "enum": [
+              "any"
+            ]
+          },
+          {
+            "$ref": "common.schema.json#/definitions/vendorProps"
+          }
+        ]
       }
     },
     "predicate": {
       "type": "object",
-      "allOf": [
+      "oneOf": [
         {
-          "oneOf": [
-            {
-              "$ref": "#/definitions/patternPredicate"
-            },
-            {
-              "$ref": "#/definitions/numberPredicate"
-            },
-            {
-              "$ref": "#/definitions/notPredicate"
-            },
-            {
-              "$ref": "#/definitions/allPredicate"
-            },
-            {
-              "$ref": "#/definitions/anyPredicate"
-            },
-            {
-              "$ref": "#/definitions/vendorProps"
-            }
-          ]
+          "$ref": "#/definitions/patternPredicate"
         },
         {
-          "$ref": "#/definitions/vendorProps"
+          "$ref": "#/definitions/numberPredicate"
+        },
+        {
+          "$ref": "#/definitions/contractPredicate"
+        },
+        {
+          "$ref": "#/definitions/notPredicate"
+        },
+        {
+          "$ref": "#/definitions/allPredicate"
+        },
+        {
+          "$ref": "#/definitions/anyPredicate"
         }
       ]
     },
