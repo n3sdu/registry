@@ -92,6 +92,9 @@
             "output": {
               "$ref": "#/definitions/fieldSet"
             },
+            "extends": {
+              "type": "string"
+            },
             "binding": {
               "type": "object",
               "additionalProperties": {
