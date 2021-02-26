@@ -269,7 +269,49 @@
       "properties": {
         "contract": {
           "type": "string"
+        },
+        "expected": {
+          "type": "string"
+        },
+        "matchOutput": {
+          "type": "string"
+        },
+        "matchBinding": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/fieldRef"
+          }
+        },
+        "setupBindings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/definitions/fieldRef"
+            }
+          }
         }
+      },
+      "required": [
+        "contract",
+        "matchOutput",
+        "matchBinding"
+      ],
+      "propertyNames": {
+        "anyOf": [
+          {
+            "enum": [
+              "contract",
+              "matchOutput",
+              "matchBinding",
+              "expected",
+              "setupBindings"
+            ]
+          },
+          {
+            "$ref": "common.schema.json#/definitions/vendorProps"
+          }
+        ]
       }
     },
     "notPredicate": {

@@ -107,8 +107,23 @@ definitions:
   contractPredicate:
     type: object
     additionalProperties: false
-    properties:
-      contract: { type: string }
+    properties: # instance format differs due to ordering and invalid acceptance
+      contract: { type: string } # no instance sharing occurs
+      expected: { type: string } # expected value; assume 'valid' if not given
+      matchOutput: { type: string } # output's name; group must match input group
+      matchBinding: # inputs; must match output group and refer to same fieldset
+        type: object
+        additionalProperties: { $ref: '#/definitions/fieldRef' }
+      setupBindings: # applied before matching; MAY CONSUME INVALID DATA
+        type: array # executed in order to set-up state
+        items:
+          type: object
+          additionalProperties: { $ref: '#/definitions/fieldRef' }
+    required: [ contract, matchOutput, matchBinding ]
+    propertyNames:
+      anyOf:
+        - enum: [ contract, matchOutput, matchBinding, expected, setupBindings ]
+        - $ref: 'common.schema.json#/definitions/vendorProps'
   # predicate negation
   notPredicate:
     type: object
