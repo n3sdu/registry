@@ -109,6 +109,7 @@ definitions:
     additionalProperties: false
     properties: # instance format differs due to altered requirements
       contract: { type: string } # no instance sharing occurs
+      config: true
       expected: { type: string } # expected value; 'valid' if not given
       matchOutput: { type: string } # output's name; group must match input
       matchBinding: # inputs (same fieldset); group must match output

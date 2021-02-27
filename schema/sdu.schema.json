@@ -270,6 +270,7 @@
         "contract": {
           "type": "string"
         },
+        "config": true,
         "expected": {
           "type": "string"
         },
