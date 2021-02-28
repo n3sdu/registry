@@ -2,6 +2,9 @@
   "$id": "http://n3sdu.github.io/r/schema/table.vis.schema.json",
   "type": "object",
   "properties": {
+    "_type": {
+      "const": "table"
+    },
     "data": {
       "$ref": "#/definitions/fieldMapping"
     },
@@ -37,12 +40,14 @@
     }
   },
   "required": [
+    "type",
     "data"
   ],
   "propertyNames": {
     "anyOf": [
       {
         "enum": [
+          "type",
           "data",
           "direction",
           "names",
