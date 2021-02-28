@@ -71,31 +71,7 @@
       }
     },
     "fieldRef": {
-      "type": "object",
-      "properties": {
-        "field": {
-          "type": "string"
-        },
-        "set": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "field"
-      ],
-      "propertyNames": {
-        "anyOf": [
-          {
-            "enum": [
-              "field",
-              "set"
-            ]
-          },
-          {
-            "$ref": "common.schema.json#/definitions/vendorProps"
-          }
-        ]
-      }
+      "$ref": "common.schema.json#/definitions/fieldRef"
     },
     "functionalInstance": {
       "type": "object",

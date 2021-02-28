@@ -36,15 +36,7 @@ definitions:
       pattern: ".+" # len at least 1
   # Used for referencing fields within the SDU
   fieldRef:
-    type: object
-    properties:
-      field: { type: string }
-      set: { type: string } # field set name
-    required: [ field ] # name of set can be omitted if field is unambiguous
-    propertyNames:
-      anyOf:
-        - enum: [ field, set ]
-        - $ref: 'common.schema.json#/definitions/vendorProps'
+    $ref: 'common.schema.json#/definitions/fieldRef'
   # describes an instantiated contract to generate output
   functionalInstance: # contract instance
     type: object

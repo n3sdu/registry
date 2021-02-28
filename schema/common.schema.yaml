@@ -3,3 +3,15 @@ definitions:
   vendorProps: # vendor-specific property names
     # vendor prefix: '_vnd_' + 1+ alnum/_ + '_'
     pattern: '^_vnd_\w+_.*$'
+
+  # Used for referencing fields within the SDU
+  fieldRef:
+    type: object
+    properties:
+      field: { type: string }
+      set: { type: string } # field set name
+    required: [ field ] # name of set can be omitted if field is unambiguous
+    propertyNames:
+      anyOf:
+        - enum: [ field, set ]
+        - $ref: '#/definitions/vendorProps'
