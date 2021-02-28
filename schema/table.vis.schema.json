@@ -15,7 +15,7 @@
     "names": {
       "oneOf": [
         {
-          "type": null
+          "type": "null"
         },
         {
           "$ref": "#/definitions/nameMapping"

@@ -8,7 +8,7 @@ properties:
     enum: [ rows, cols ]
   names: # default attribute display names
     oneOf:
-      - type: null # disable headings
+      - type: 'null' # disable headings
       - $ref: '#/definitions/nameMapping'
   sort:
     oneOf: # one sort key can be represented as object
