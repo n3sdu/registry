@@ -43,6 +43,37 @@
     },
     "plausibility": {
       "$ref": "#/definitions/predicateOrNull"
+    },
+    "visualisation": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "caption": {
+            "type": "string"
+          },
+          "display": {
+            "oneOf": [
+              {
+                "$ref": "table.vis.schema.json#"
+              }
+            ]
+          }
+        },
+        "propertyNames": {
+          "anyOf": [
+            {
+              "enum": [
+                "caption",
+                "display"
+              ]
+            },
+            {
+              "$ref": "common.schema.json#/definitions/vendorProps"
+            }
+          ]
+        }
+      }
     }
   },
   "propertyNames": {
@@ -55,7 +86,8 @@
           "input",
           "functional",
           "validation",
-          "plausibility"
+          "plausibility",
+          "visualisation"
         ]
       }
     ]
@@ -281,6 +313,7 @@
               "contract",
               "matchOutput",
               "matchBinding",
+              "config",
               "expected",
               "setupBindings"
             ]

@@ -1,0 +1,192 @@
+{
+  "$id": "http://n3sdu.github.io/r/schema/table.vis.schema.json",
+  "type": "object",
+  "properties": {
+    "data": {
+      "$ref": "#/definitions/fieldMapping"
+    },
+    "direction": {
+      "type": "string",
+      "enum": [
+        "rows",
+        "cols"
+      ]
+    },
+    "names": {
+      "oneOf": [
+        {
+          "type": null
+        },
+        {
+          "$ref": "#/definitions/nameMapping"
+        }
+      ]
+    },
+    "sort": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/sortBy"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sortBy"
+          }
+        }
+      ]
+    }
+  },
+  "required": [
+    "data"
+  ],
+  "propertyNames": {
+    "anyOf": [
+      {
+        "enum": [
+          "data",
+          "direction",
+          "names",
+          "sort"
+        ]
+      },
+      {
+        "$ref": "common.schema.json#/definitions/vendorProps"
+      }
+    ]
+  },
+  "definitions": {
+    "nameMapping": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "fieldMapping": {
+      "type": "object",
+      "properties": {
+        "set": {
+          "type": "string"
+        },
+        "attributes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "names": {
+          "$ref": "#/definitions/nameMapping"
+        },
+        "joins": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/join"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/join"
+              }
+            }
+          ]
+        }
+      },
+      "required": [
+        "set",
+        "attributes"
+      ],
+      "propertyNames": {
+        "anyOf": [
+          {
+            "enum": [
+              "set",
+              "attributes",
+              "names",
+              "joins"
+            ]
+          },
+          {
+            "$ref": "common.schema.json#/definitions/vendorProps"
+          }
+        ]
+      }
+    },
+    "join": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "$ref": "common.schema.json#/definitions/fieldRef"
+        },
+        "to": {
+          "$ref": "common.schema.json#/definitions/fieldRef"
+        },
+        "joined": {
+          "$ref": "#/definitions/fieldMapping"
+        },
+        "type": {
+          "enum": [
+            "inner",
+            "from",
+            "full"
+          ]
+        }
+      },
+      "required": [
+        "from",
+        "to",
+        "joined"
+      ],
+      "propertyNames": {
+        "anyOf": [
+          {
+            "enum": [
+              "from",
+              "to",
+              "joined",
+              "type"
+            ]
+          },
+          {
+            "$ref": "common.schema.json#/definitions/vendorProps"
+          }
+        ]
+      }
+    },
+    "sortBy": {
+      "type": "object",
+      "properties": {
+        "by": {
+          "$ref": "common.schema.json#/definitions/fieldRef"
+        },
+        "order": {
+          "enum": [
+            "asc",
+            "desc"
+          ]
+        },
+        "mode": {
+          "enum": [
+            "system",
+            "lexicographic",
+            "alphanum",
+            "numeric"
+          ]
+        }
+      },
+      "required": [
+        "by"
+      ],
+      "propertyNames": {
+        "anyOf": [
+          {
+            "enum": [
+              "by",
+              "order",
+              "mode"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

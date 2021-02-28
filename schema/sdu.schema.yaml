@@ -21,10 +21,23 @@ properties:
         - pattern: '^_(?!vnd_).*$'
   validation: { $ref: '#/definitions/predicateOrNull' }
   plausibility: { $ref: '#/definitions/predicateOrNull' }
+  visualisation:
+    type: array
+    items:
+      type: object
+      properties:
+        caption: { type: string }
+        display:
+          oneOf:
+            - $ref: 'table.vis.schema.json#'
+      propertyNames:
+        anyOf:
+          - enum: [ caption, display ]
+          - $ref: 'common.schema.json#/definitions/vendorProps'
 propertyNames:
   anyOf:
     - $ref: 'common.schema.json#/definitions/vendorProps'
-    - enum: [ input, functional, validation, plausibility ]
+    - enum: [ input, functional, validation, plausibility, visualisation ]
 definitions:
   # Used for inputs, outputs
   fieldSet:
@@ -116,7 +129,7 @@ definitions:
     propertyNames:
       anyOf:
         - enum: [ contract, matchOutput, matchBinding,
-                  expected, setupBindings ]
+                  config, expected, setupBindings ]
         - $ref: 'common.schema.json#/definitions/vendorProps'
   # predicate negation
   notPredicate:

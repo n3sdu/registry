@@ -1,0 +1,81 @@
+$id: "http://n3sdu.github.io/r/schema/table.vis.schema.json"
+type: object
+properties:
+  data: # actual data binding
+    $ref: '#/definitions/fieldMapping'
+  direction: # how data is represented; default 'rows'
+    type: string
+    enum: [ rows, cols ]
+  names: # default attribute display names
+    oneOf:
+      - type: null # disable headings
+      - $ref: '#/definitions/nameMapping'
+  sort:
+    oneOf: # one sort key can be represented as object
+      - $ref: '#/definitions/sortBy'
+      - type: array
+        items: { $ref: '#/definitions/sortBy' }
+required: [ data ]
+propertyNames:
+  anyOf:
+    - enum: [ data, direction, names, sort ]
+    - $ref: 'common.schema.json#/definitions/vendorProps'
+definitions:
+  nameMapping: # key/value name mappings
+    type: object
+    additionalProperties: { type: string }
+  fieldMapping: # table field mapping
+    type: object
+    properties:
+      set: { type: string } # fieldset
+      attributes: # attributes in display order
+        type: array
+        minItems: 1
+        items: { type: string }
+      names: { $ref: '#/definitions/nameMapping' }
+      joins:
+        oneOf: # single join can be expressed as flat object
+          - $ref: '#/definitions/join'
+          - type: array
+            items: { $ref: '#/definitions/join' }
+    required: [ set, attributes ]
+    propertyNames:
+      anyOf:
+        - enum: [ set, attributes, names, joins ]
+        - $ref: 'common.schema.json#/definitions/vendorProps'
+  join: # join definition
+    type: object
+    properties:
+      from: # field of parent or ancestor set
+        $ref: 'common.schema.json#/definitions/fieldRef'
+      to: # field of 'joined' or descendant set
+        $ref: 'common.schema.json#/definitions/fieldRef'
+      joined: { $ref: '#/definitions/fieldMapping' }
+      type: # default 'from'
+        enum:
+          - inner # emit only if present on both sides
+          - from # emit if present in from side (fill '')
+          - full # emit if present on either side (fill '')
+    required: [ from, to, joined ]
+    propertyNames:
+      anyOf:
+        - enum: [ from, to, joined, type ]
+        - $ref: 'common.schema.json#/definitions/vendorProps'
+  sortBy:
+    type: object
+    properties:
+      by: # field to actually sort by
+        $ref: 'common.schema.json#/definitions/fieldRef'
+      order: # sort direction; default asc
+        enum: [ asc, desc ]
+      mode: # sort mode, default system
+        enum:
+          - system # system specific (e.g. raw bytes)
+          - lexicographic # case-insensitive
+          - alphanum # case-sensitive
+          - numeric # try to parse as number
+    required: [ by ]
+    propertyNames:
+      anyOf:
+        - enum: [ by, order, mode ]
+
