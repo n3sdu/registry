@@ -122,8 +122,8 @@
         "from": {
           "$ref": "common.schema.json#/definitions/fieldRef"
         },
-        "to": {
-          "$ref": "common.schema.json#/definitions/fieldRef"
+        "joinField": {
+          "type": "string"
         },
         "joined": {
           "$ref": "#/definitions/fieldMapping"
@@ -189,6 +189,9 @@
               "order",
               "mode"
             ]
+          },
+          {
+            "$ref": "common.schema.json#/definitions/vendorProps"
           }
         ]
       }

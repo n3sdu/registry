@@ -49,8 +49,7 @@ definitions:
     properties:
       from: # field of parent or ancestor set
         $ref: 'common.schema.json#/definitions/fieldRef'
-      to: # field of 'joined' or descendant set
-        $ref: 'common.schema.json#/definitions/fieldRef'
+      joinField: { type: string }
       joined: { $ref: '#/definitions/fieldMapping' }
       type: # default 'from'
         enum:
@@ -79,4 +78,4 @@ definitions:
     propertyNames:
       anyOf:
         - enum: [ by, order, mode ]
-
+        - $ref: 'common.schema.json#/definitions/vendorProps'
