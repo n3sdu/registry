@@ -16,10 +16,10 @@ properties:
       - $ref: '#/definitions/sortBy'
       - type: array
         items: { $ref: '#/definitions/sortBy' }
-required: [ type, data ]
+required: [ _type, data ]
 propertyNames:
   anyOf:
-    - enum: [ type, data, direction, names, sort ]
+    - enum: [ _type, data, direction, names, sort ]
     - $ref: 'common.schema.json#/definitions/vendorProps'
 definitions:
   nameMapping: # key/value name mappings

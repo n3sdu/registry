@@ -40,14 +40,14 @@
     }
   },
   "required": [
-    "type",
+    "_type",
     "data"
   ],
   "propertyNames": {
     "anyOf": [
       {
         "enum": [
-          "type",
+          "_type",
           "data",
           "direction",
           "names",

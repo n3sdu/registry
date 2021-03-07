@@ -1,0 +1,193 @@
+{
+  "$id": "http://n3sdu.github.io/r/schema/2pmap.vis.schema.json",
+  "type": "object",
+  "properties": {
+    "_type": {
+      "const": "2pmap"
+    },
+    "data": {
+      "$ref": "#/definitions/mapDataBinding"
+    },
+    "projection": {
+      "$ref": "#/definitions/mapProjection"
+    },
+    "display": {
+      "$ref": "#/definitions/mapDisplayConfig"
+    }
+  },
+  "required": [
+    "_type",
+    "data",
+    "projection"
+  ],
+  "propertyNames": {
+    "anyOf": [
+      {
+        "enum": [
+          "_type",
+          "projection",
+          "display"
+        ]
+      },
+      {
+        "$ref": "common.schema.json#/definitions/vendorProps"
+      }
+    ]
+  },
+  "definitions": {
+    "fieldOrConstant": {
+      "type": "object",
+      "oneOf": [
+        {
+          "properties": {
+            "const": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                }
+              ]
+            }
+          },
+          "required": [
+            "const"
+          ]
+        },
+        {
+          "properties": {
+            "field": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "field"
+          ]
+        }
+      ],
+      "propertyNames": {
+        "anyOf": [
+          {
+            "enum": [
+              "const",
+              "field"
+            ]
+          },
+          {
+            "$ref": "common.schema.json#/definitions/vendorProps"
+          }
+        ]
+      }
+    },
+    "mapDataBinding": {
+      "type": "object",
+      "properties": {
+        "set": {
+          "type": "string"
+        },
+        "coords": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitinos/fieldOrConstant"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "label": {
+          "type": "string"
+        },
+        "size": {
+          "$ref": "#/definitions/fieldOrConstant"
+        },
+        "color": {
+          "$ref": "#/definitions/fieldOrConstant"
+        }
+      },
+      "required": [
+        "set",
+        "coords"
+      ],
+      "propertyNames": {
+        "anyOf": [
+          {
+            "enum": [
+              "set",
+              "coords",
+              "label",
+              "size",
+              "color"
+            ]
+          },
+          {
+            "$ref": "common.schema.json#/definitions/vendorProps"
+          }
+        ]
+      }
+    },
+    "mapProjection": {
+      "type": "object",
+      "oneOf": [
+        {
+          "properties": {
+            "epsg": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "epsg"
+          ]
+        }
+      ],
+      "propertyNames": {
+        "anyOf": [
+          {
+            "enum": [
+              "epsg"
+            ]
+          },
+          {
+            "$ref": "common.schema.json#/definitions/vendorProps"
+          }
+        ]
+      }
+    },
+    "mapDisplayConfig": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "boolean"
+        },
+        "type": {
+          "enum": [
+            "system",
+            "terrain",
+            "street",
+            "satellite"
+          ]
+        },
+        "size": {
+          "enum": [
+            "pixels",
+            "metric",
+            "coords"
+          ]
+        }
+      },
+      "propertyNames": {
+        "anyOf": [
+          {
+            "enum": [
+              "label",
+              "type",
+              "size"
+            ]
+          },
+          {
+            "$ref": "common.schema.json#/definitions/vendorProps"
+          }
+        ]
+      }
+    }
+  }
+}

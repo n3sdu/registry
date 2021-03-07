@@ -30,6 +30,7 @@ properties:
         display:
           oneOf:
             - $ref: 'table.vis.schema.json#'
+            - $ref: '2pmap.vis.schema.json#'
       required: [ display ]
       propertyNames:
         anyOf:

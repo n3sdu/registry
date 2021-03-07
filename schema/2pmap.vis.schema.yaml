@@ -1,0 +1,75 @@
+$id: "http://n3sdu.github.io/r/schema/2pmap.vis.schema.json"
+type: object
+properties:
+  _type: { const: '2pmap' } # 2-dim point map
+  data: { $ref: '#/definitions/mapDataBinding' }
+  projection: { $ref: '#/definitions/mapProjection' }
+  display: { $ref: '#/definitions/mapDisplayConfig' }
+required: [ _type, data, projection ]
+propertyNames:
+  anyOf:
+    - enum: [ _type, projection, display ]
+    - $ref: 'common.schema.json#/definitions/vendorProps'
+definitions:
+  fieldOrConstant: # use predefined constant or field value
+    type: object
+    oneOf:
+      - properties:
+          const:
+            oneOf: # allow numbers, where applicable
+              - type: string
+              - type: number
+        required: [ const ]
+      - properties:
+          field: { type: string }
+        required: [ field ]
+    propertyNames:
+      anyOf:
+        - enum: [ const, field ] # exclusive due to oneOf
+        - $ref: 'common.schema.json#/definitions/vendorProps'
+  mapDataBinding:
+    type: object
+    properties:
+      set: { type: string } # field set being bound
+      coords: # point coordinates
+        type: array
+        items: { $ref: '#/definitinos/fieldOrConstant' }
+        minItems: 2
+        maxItems: 2
+      label: { type: string } # point label
+      size: { $ref: '#/definitions/fieldOrConstant' }
+      color: { $ref: '#/definitions/fieldOrConstant' }
+    required: [ set, coords ]
+    propertyNames:
+      anyOf:
+        - enum: [ set, coords, label, size, color ]
+        - $ref: 'common.schema.json#/definitions/vendorProps'
+  mapProjection:
+    type: object
+    oneOf: # further extension possible
+      - properties:
+          epsg: { type: integer } # EPSG id of the projection
+        required: [ epsg ]
+    propertyNames:
+      anyOf:
+        - enum: [ epsg ]
+        - $ref: 'common.schema.json#/definitions/vendorProps'
+  mapDisplayConfig:
+    type: object
+    properties:
+      label: { type: boolean } # show (default)/hide labels
+      type: # map type on a best-effort basis
+        enum:
+          - system # default
+          - terrain
+          - street
+          - satellite
+      size: # how 'size' data is interpreted
+        enum:
+          - pixels # default; viewport pixels
+          - metric # circumference on ground in meters
+          - coords # in coordinate units
+    propertyNames:
+      anyOf:
+        - enum: [ label, type, size]
+        - $ref: 'common.schema.json#/definitions/vendorProps'
