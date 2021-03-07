@@ -1,0 +1,17 @@
+$id: "http://n3sdu.github.io/r/schema/table.vis.schema.json"
+type: object
+properties:
+  _type: { const: 'contract' }
+  shared: { type: boolean } # default false
+  # as in sdu.schema.json#/definitions/functionalInstance
+  contract: { type: string } # contract name
+  instance: { type: string } # instance
+  binding:
+    type: object
+    additionalProperties: { $ref: 'common.schema.json#/definitions/fieldRef' }
+  config: true # allow arbitrary content
+required: [ _type, contract ]
+propertyNames:
+  anyOf:
+    - enum: [ _type, shared, contract, instance, binding, config ]
+    - $ref: 'common.schema.json#/definitions/vendorProps'

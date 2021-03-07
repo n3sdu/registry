@@ -1,0 +1,46 @@
+{
+  "$id": "http://n3sdu.github.io/r/schema/table.vis.schema.json",
+  "type": "object",
+  "properties": {
+    "_type": {
+      "const": "contract"
+    },
+    "shared": {
+      "type": "boolean"
+    },
+    "contract": {
+      "type": "string"
+    },
+    "instance": {
+      "type": "string"
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "common.schema.json#/definitions/fieldRef"
+      }
+    },
+    "config": true
+  },
+  "required": [
+    "_type",
+    "contract"
+  ],
+  "propertyNames": {
+    "anyOf": [
+      {
+        "enum": [
+          "_type",
+          "shared",
+          "contract",
+          "instance",
+          "binding",
+          "config"
+        ]
+      },
+      {
+        "$ref": "common.schema.json#/definitions/vendorProps"
+      }
+    ]
+  }
+}

@@ -59,6 +59,9 @@
               },
               {
                 "$ref": "2pmap.vis.schema.json#"
+              },
+              {
+                "$ref": "contract.vis.schema.json#"
               }
             ]
           }
