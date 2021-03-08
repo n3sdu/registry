@@ -1,0 +1,130 @@
+{
+  "$id": "http://n3sdu.github.io/r/schema/contract.schema.json",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "#/definitions/contractId"
+    },
+    "content": {
+      "type": "string"
+    },
+    "outputs": {
+      "$ref": "#/definitions/outputPort"
+    },
+    "inputs": {
+      "$ref": "#/definitions/inputPort"
+    }
+  },
+  "required": [
+    "id",
+    "content",
+    "inputs",
+    "outputs"
+  ],
+  "propertyNames": {
+    "anyOf": [
+      {
+        "enum": [
+          "id",
+          "content",
+          "inputs",
+          "outputs"
+        ]
+      },
+      {
+        "$ref": "common.schema.json#/definitions/vendorProps"
+      }
+    ]
+  },
+  "definitions": {
+    "contractId": {
+      "type": "string",
+      "anyOf": [
+        {
+          "pattern": "^[^_].*$"
+        },
+        {
+          "$ref": "common.schema.json#/definitions/vendorProps"
+        }
+      ]
+    },
+    "contractPort": {
+      "type": "object",
+      "properties": {
+        "group": {
+          "type": "string"
+        }
+      }
+    },
+    "contractPortNames": {
+      "enum": [
+        "group"
+      ]
+    },
+    "outputPort": {
+      "type": "object",
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "null"
+          },
+          {
+            "$ref": "#/definitions/contractPort",
+            "propertyNames": {
+              "$ref": "#/definitions/contractPortNames"
+            }
+          }
+        ]
+      }
+    },
+    "inputPort": {
+      "type": "object",
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "null"
+          },
+          {
+            "allOf": [
+              {
+                "$ref": "#/definitions/contractPort",
+                "propertyNames": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/definitions/contractPortNames"
+                    },
+                    {
+                      "enum": [
+                        "unboundDefault"
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "unboundDefault": {
+                    "type": "string"
+                  }
+                },
+                "propertyNames": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/definitions/contractPortNames"
+                    },
+                    {
+                      "enum": [
+                        "unboundDefault"
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

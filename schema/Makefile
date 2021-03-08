@@ -5,7 +5,7 @@ YQ ?= yq
 RMALL ?= $(if $(filter $(OS),Windows_NT),del /F/Q,rm -f)
 
 ### Definitions
-schemas = sdu.schema.json common.schema.json \
+schemas = sdu.schema.json common.schema.json contract.schema.json \
           table.vis.schema.json 2pmap.vis.schema.json contract.vis.schema.json
 
 ### Actions

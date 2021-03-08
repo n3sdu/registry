@@ -1,0 +1,50 @@
+$id: "http://n3sdu.github.io/r/schema/contract.schema.json"
+type: object
+properties:
+  id: { $ref: '#/definitions/contractId' }
+  content: { type: string }
+  outputs: { $ref: '#/definitions/outputPort' }
+  inputs: { $ref: '#/definitions/inputPort' }
+required: [ id, content, inputs, outputs ]
+propertyNames:
+  anyOf:
+    - enum: [ id, content, inputs, outputs ]
+    - $ref: 'common.schema.json#/definitions/vendorProps'
+definitions:
+  contractId: # valid contract names
+    type: string
+    anyOf: # allow non _-prefixed strings or vendor names
+      - pattern: '^[^_].*$'
+      - $ref: 'common.schema.json#/definitions/vendorProps'
+  contractPort: # shared for input/output
+    type: object
+    properties:
+      group: { type: string }
+  contractPortNames: # separate for easier extension
+    enum: [ group ]
+  outputPort:
+    type: object
+    additionalProperties: # names given as keys
+      anyOf:
+        - type: 'null' # treat like empty object
+        - $ref: '#/definitions/contractPort'
+          propertyNames: # group + vendor props
+            $ref: '#/definitions/contractPortNames'
+  inputPort:
+    type: object
+    additionalProperties: # names given as keys
+      anyOf:
+        - type: 'null' # treat like empty object
+        - allOf: # ensure both properties are validated
+            - $ref: '#/definitions/contractPort'
+              propertyNames: # group + unboundDefault + vendor props
+                anyOf:
+                  - $ref: '#/definitions/contractPortNames'
+                  - enum: [ unboundDefault ]
+            - type: object
+              properties:
+                unboundDefault: { type: string }
+              propertyNames: # same as above for proper matching
+                anyOf:
+                  - $ref: '#/definitions/contractPortNames'
+                  - enum: [ unboundDefault ]
