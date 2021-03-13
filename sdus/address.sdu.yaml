@@ -59,7 +59,7 @@ functional:
       # Extended fields
         canonical, fitConfidence
     ]
-    binding:
+    binding: # Bind all input fields
       country: { set: addresses, field: country }
       state: { set: addresses, field: state }
       zip: { set: addresses, field: zip }
@@ -72,11 +72,62 @@ functional:
     contract: address-normalizer
   _geocoded:
     priority: 100 # Perform after normalization
-    output: [ x, y, normalizationAccuracy ]
-    extends: _normalized # Based on normalized fields
+    output: [ x, y, localizationAccuracy ]
+    extends: _normalized # Extend normalized datasets
     binding:
       address: { field: canonical } # geocode canonical address
     contract: address-geocoder
-    config:
-      spatialReference: EPSG:4326
+    config: # Example for arbitrary contract config
+      spatialReference: EPSG:4326 # output coords in 4326
 
+visualisation:
+  - caption: Raw data
+    display:
+      _type: table
+      data:
+        set: addresses
+        attributes:
+          - country
+          - state
+          - zip
+          - city
+          - street
+          - number
+          - numberext
+          - line1
+          - line2
+  - caption: Normalized addresses (with geocodes)
+    display:
+      _type: table
+      data:
+        set: _geocoded
+        attributes:
+          - country
+          - state
+          - zip
+          - city
+          - line1 # Line 1 will always be filled after normalization
+          - line2
+          - canonical # display canonical full address
+          - x
+          - y
+          - fitConfidence # metadata for address usage
+          - localizationAccuracy
+        names:
+          x: latitude
+          y: longitude
+          canonical: full address
+          fitConfidence: fit
+          loccalizationAccuracy: accuracy
+  - caption: Address map # Map display
+    _vnd_n3_localized_caption: # example for vendor prop usage
+      de: "Adresskarte"
+      ru: Адресная карта
+    display: # Configure map
+      _type: 2pmap
+      projection: { epsg: 4326 } # Use lat/lon, as defined in _conf
+      display:
+        type: street # request street map
+      data:
+        set: _geocoded # use geocoded functionality above
+        coords: [ { field: x }, { field: y } ] # bind coords
