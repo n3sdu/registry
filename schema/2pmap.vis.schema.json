@@ -89,7 +89,7 @@
         "coords": {
           "type": "array",
           "items": {
-            "$ref": "#/definitinos/fieldOrConstant"
+            "$ref": "#/definitions/fieldOrConstant"
           },
           "minItems": 2,
           "maxItems": 2

@@ -114,7 +114,6 @@ definitions:
   # contract predicate
   contractPredicate:
     type: object
-    additionalProperties: false
     properties: # instance format differs due to altered requirements
       contract: { type: string } # no instance sharing occurs
       config: true

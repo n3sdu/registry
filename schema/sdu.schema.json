@@ -282,7 +282,6 @@
     },
     "contractPredicate": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "contract": {
           "type": "string"

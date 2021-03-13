@@ -33,7 +33,7 @@ definitions:
       set: { type: string } # field set being bound
       coords: # point coordinates
         type: array
-        items: { $ref: '#/definitinos/fieldOrConstant' }
+        items: { $ref: '#/definitions/fieldOrConstant' }
         minItems: 2
         maxItems: 2
       label: { type: string } # point label
