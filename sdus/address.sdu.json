@@ -1,0 +1,193 @@
+{
+  "input": {
+    "addresses": [
+      "country",
+      "state",
+      "zip",
+      "city",
+      "street",
+      "number",
+      "numberext",
+      "line1",
+      "line2"
+    ]
+  },
+  "validation": {
+    "all": [
+      {
+        "notEmpty": {
+          "set": "addresses",
+          "field": "country"
+        }
+      },
+      {
+        "any": [
+          {
+            "all": [
+              {
+                "notEmpty": {
+                  "set": "addresses",
+                  "field": "line1"
+                }
+              },
+              {
+                "pattern": "^$",
+                "target": {
+                  "set": "addresses",
+                  "field": "street"
+                }
+              },
+              {
+                "pattern": "^$",
+                "target": {
+                  "set": "addresses",
+                  "field": "number"
+                }
+              },
+              {
+                "pattern": "^$",
+                "target": {
+                  "set": "addresses",
+                  "field": "numberext"
+                }
+              }
+            ]
+          },
+          {
+            "all": [
+              {
+                "notEmpty": {
+                  "set": "addresses",
+                  "field": "number"
+                }
+              },
+              {
+                "pattern": "^$",
+                "target": {
+                  "set": "addresses",
+                  "field": "line1"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "plausibility": {
+    "contract": "address-normalizer",
+    "expected": "high",
+    "matchOutput": "fitConfidence",
+    "matchBinding": {
+      "country": {
+        "set": "addresses",
+        "field": "country"
+      },
+      "state": {
+        "set": "addresses",
+        "field": "state"
+      },
+      "zip": {
+        "set": "addresses",
+        "field": "zip"
+      },
+      "city": {
+        "set": "addresses",
+        "field": "city"
+      },
+      "street": {
+        "set": "addresses",
+        "field": "street"
+      },
+      "number": {
+        "set": "addresses",
+        "field": "number"
+      },
+      "numberext": {
+        "set": "addresses",
+        "field": "number"
+      },
+      "line1": {
+        "set": "addresses",
+        "field": "line1"
+      },
+      "line2": {
+        "set": "adrresses",
+        "field": "line2"
+      }
+    }
+  },
+  "functional": {
+    "_normalized": {
+      "priority": 0,
+      "output": [
+        "country",
+        "state",
+        "zip",
+        "city",
+        "street",
+        "number",
+        "numberext",
+        "canonical",
+        "fitConfidence"
+      ],
+      "binding": {
+        "country": {
+          "set": "addresses",
+          "field": "country"
+        },
+        "state": {
+          "set": "addresses",
+          "field": "state"
+        },
+        "zip": {
+          "set": "addresses",
+          "field": "zip"
+        },
+        "city": {
+          "set": "addresses",
+          "field": "city"
+        },
+        "street": {
+          "set": "addresses",
+          "field": "street"
+        },
+        "number": {
+          "set": "addresses",
+          "field": "number"
+        },
+        "numberext": {
+          "set": "addresses",
+          "field": "number"
+        },
+        "line1": {
+          "set": "addresses",
+          "field": "line1"
+        },
+        "line2": {
+          "set": "adrresses",
+          "field": "line2"
+        }
+      },
+      "contract": "address-normalizer"
+    },
+    "_geocoded": {
+      "priority": 100,
+      "output": [
+        "x",
+        "y",
+        "normalizationAccuracy"
+      ],
+      "extends": "_normalized",
+      "binding": {
+        "address": {
+          "field": "canonical"
+        }
+      },
+      "contract": "address-geocoder",
+      "config": {
+        "spatialReference": "EPSG:4326"
+      }
+    }
+  }
+}

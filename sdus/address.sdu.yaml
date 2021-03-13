@@ -1,0 +1,82 @@
+### SDU to describe an arbitrary address
+# This is a simple example of a Smart Data Unit and how to approach real-life aspects with the SDU concept.
+# It merely serves for demonstration purposes and should not be considered production-ready or feature-complete.
+
+input: # Input definitions
+  # For addresses, only a single input set is required
+  addresses: # Main input field
+    - country
+    - state   # if applicable
+    - zip     # if applicable
+    - city
+    # Address formats differ between countries an regions
+    # Western style (mutually exclusive with generic line 1)
+    - street
+    - number
+    - numberext #
+    # More generic than street/number/numberext
+    - line1
+    # additional address information, regardless of style above
+    - line2
+
+validation:
+  all:
+    - notEmpty: { set: addresses, field: country } # country must always be given
+    - any: # mutual exclusion of line1 and street/number[ext]
+        - all: # line1 and no other fields
+            - notEmpty: { set: addresses, field: line1 }
+            - pattern: "^$"
+              target: { set: addresses, field: street }
+            - pattern: "^$"
+              target: { set: addresses, field: number }
+            - pattern: "^$"
+              target: { set: addresses, field: numberext }
+        - all: # at least street and no line1
+            - notEmpty: { set: addresses, field: number }
+            - pattern: "^$"
+              target: { set: addresses, field: line1 }
+plausibility: # Non-existent (according to normalization attempts) addresses are invalid
+  contract: address-normalizer # if the address can be normalized
+  expected: high               # ... with a high confidence
+  matchOutput: fitConfidence   # ... for a fit it likely exists
+  matchBinding: # contract consumes the input fields 1:1
+    country: { set: addresses, field: country }
+    state: { set: addresses, field: state }
+    zip: { set: addresses, field: zip }
+    city: { set: addresses, field: city }
+    street: { set: addresses, field: street }
+    number: { set: addresses, field: number }
+    numberext: { set: addresses, field: number }
+    line1: { set: addresses, field: line1 }
+    line2: { set: adrresses, field: line2 }
+
+functional:
+  _normalized: # Address normalization
+    priority: 0 # happens first
+    output: [
+      # Standard fields (for override)
+        country, state, zip, city, street, number, numberext,
+      # Extended fields
+        canonical, fitConfidence
+    ]
+    binding:
+      country: { set: addresses, field: country }
+      state: { set: addresses, field: state }
+      zip: { set: addresses, field: zip }
+      city: { set: addresses, field: city }
+      street: { set: addresses, field: street }
+      number: { set: addresses, field: number }
+      numberext: { set: addresses, field: number }
+      line1: { set: addresses, field: line1 }
+      line2: { set: adrresses, field: line2 }
+    contract: address-normalizer
+  _geocoded:
+    priority: 100 # Perform after normalization
+    output: [ x, y, normalizationAccuracy ]
+    extends: _normalized # Based on normalized fields
+    binding:
+      address: { field: canonical } # geocode canonical address
+    contract: address-geocoder
+    config:
+      spatialReference: EPSG:4326
+
