@@ -1,0 +1,12 @@
+### Setup
+
+# Validation mappings (assuming 1 subdirectory)
+SCHEMAS_PATH ?= ../schema/
+VALIDATE_MAPPINGS ?= $(foreach file,$(wildcard $(abspath $(SCHEMAS_PATH))/*.schema.json), -m "http://n3contract.github.io/r/schema/$(notdir $(file))=$(abspath $(file))")
+
+# yq executable
+YQ ?= yq
+# remove all files command
+RMALL ?= $(if $(filter $(OS),Windows_NT),del /F/Q,rm -f)
+# JSON schema validation command
+VALIDATE ?= docker run --rm -v "$$(CURDIR):/data:ro" -v "$(abspath $(SCHEMAS_PATH)):$(abspath $(SCHEMAS_PATH)):ro" jonasprogrammer/json-schema-validator

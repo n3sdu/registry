@@ -1,8 +1,4 @@
-### Setup
-# yq executable
-YQ ?= yq
-# remove all files command
-RMALL ?= $(if $(filter $(OS),Windows_NT),del /F/Q,rm -f)
+include ../build/Makefile.setup
 
 ### Definitions
 schemas = sdu.schema.json common.schema.json contract.schema.json \
