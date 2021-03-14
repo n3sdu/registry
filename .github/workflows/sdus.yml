@@ -1,0 +1,32 @@
+name: Sdus
+
+on:
+  push:
+    branches: [ master ]
+    paths: [ 'sdus/**' ]
+  pull_request:
+    branches: [ master ]
+    paths: [ 'sdus/**' ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Make
+        run: |
+          cd "$GITHUB_WORKSPACE/sdus"
+
+          # Write out current build targets' checksums
+          SUMOUT="$RUNNER_TEMP/schema-sdus.sum"
+          sha256sum $(make --quiet target-files) > "$SUMOUT"
+
+          # Rebuild everything; check schema validity in process
+          make clean
+          make all
+
+          # Validate checksums still match the build output
+          sha256sum -c "$SUMOUT"
