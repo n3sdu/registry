@@ -1,17 +1,11 @@
-### Setup
-# yq executable
-YQ ?= yq
-# remove all files command
-RMALL ?= $(if $(filter $(OS),Windows_NT),del /F/Q,rm -f)
-VALIDATE ?= docker run --rm -v "$(CURDIR):/data:ro" -v "$(CURDIR)/../schema:/schema:ro" jonasprogrammer/json-schema-validator
-VALIDATE_MAPPINGS ?= $(foreach file,$(wildcard ../schema/*.schema.json), -m "http://n3sdu.github.io/r/schema/$(notdir $(file))=$(file)")
+include ../build/Makefile.setup
 
 ### Definitions
 yamlsdus := $(patsubst %.sdu.yaml,%.sdu.json,$(wildcard *.sdu.yaml))
 sdus := $(sort $(wildcard *.sdu.json) $(yamlsdus))
 
 ### Actions
-all: $(yamlsdus) check
+all: $(yamlsdus)
 
 clean:
 	-$(RMALL) $(yamlsdus)
@@ -23,7 +17,7 @@ sdus:
 	echo $(sdus)
 
 check: $(yamlsdus)
-	$(VALIDATE) $(VALIDATE_MAPPINGS) -s http://n3sdu.github.io/r/schema/sdu.schema.json $<
+	$(VALIDATE) $(VALIDATE_MAPPINGS) -s http://n3sdu.github.io/r/schema/sdu.schema.json $(sdus)
 
 .PHONY: all clean target-files sdus
 

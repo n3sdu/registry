@@ -1,0 +1,81 @@
+name: Main
+
+on:
+  push:
+  pull_request:
+    branches: [ master ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    env:
+      SCHEMA_SUM_NAME: schema.sum
+      CONTRACT_SUM_NAME: contracts.sum
+      SDU_SUM_NAME: sdus.sum
+    steps:
+      - uses: actions/checkout@v2
+      - uses: chrisdickinson/setup-yq@6b47cdfc18ce135d0a18499c5487bc8fdc0a4457
+        with:
+          yq-version: v4.5.1
+      - name: Checksums before building
+        run: |
+          ##### SCHEMA
+          cd "$GITHUB_WORKSPACE/schema"
+
+          # Write out current build targets' checksums
+          SUMOUT="$RUNNER_TEMP/$SCHEMA_SUM_NAME"
+          sha256sum $(make --quiet target-files) > "$SUMOUT"
+
+          echo "SCHEMA_SUM_FILE=$SUMOUT" >> $GITHUB_ENV
+
+
+          #### CONTRACTS
+          cd "$GITHUB_WORKSPACE/contracts"
+
+          # Write out current build targets' checksums
+          SUMOUT="$RUNNER_TEMP/$CONTRACT_SUM_NAME"
+          sha256sum $(make --quiet contracts) > "$SUMOUT"
+
+          echo "CONTRACT_SUM_FILE=$SUMOUT" >> $GITHUB_ENV
+
+
+          #### SDUS
+          cd "$GITHUB_WORKSPACE/sdus"
+
+          # Write out current build targets' checksums
+          SUMOUT="$RUNNER_TEMP/$SDU_SUM_NAME"
+          sha256sum $(make --quiet sdus) > "$SUMOUT"
+
+          echo "SDU_SUM_FILE=$SUMOUT" >> $GITHUB_ENV
+      - name: Build
+        run: |
+          make clean
+          make all
+          make check
+      - name: Verify sums
+        run: |
+          ##### SCHEMA
+          cd "$GITHUB_WORKSPACE/schema"
+          sha256sum -c "$SCHEMA_SUM_FILE"
+
+          #### CONTRACTS
+          cd "$GITHUB_WORKSPACE/contracts"
+          sha256sum -c "$CONTRACT_SUM_FILE"
+
+          #### SDUS
+          cd "$GITHUB_WORKSPACE/sdus"
+          sha256sum -c "$SDU_SUM_FILE"
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [ build ]
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: update-registry
+          ref: master
+          repo: n3sdu/n3sdu.github.io
+          token: ${{ secrets.WORKFLOW_TRIGGER_PAT }}

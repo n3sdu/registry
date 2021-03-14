@@ -1,0 +1,9 @@
+# Contract for address geocoding
+
+id: address-geocoder
+
+content: |
+  Some content sadf
+
+inputs: {}
+outputs: {}
