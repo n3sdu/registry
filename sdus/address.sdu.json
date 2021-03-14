@@ -56,10 +56,20 @@
           {
             "all": [
               {
-                "notEmpty": {
-                  "set": "addresses",
-                  "field": "number"
-                }
+                "any": [
+                  {
+                    "notEmpty": {
+                      "set": "addresses",
+                      "field": "street"
+                    }
+                  },
+                  {
+                    "notEmpty": {
+                      "set": "addresses",
+                      "field": "number"
+                    }
+                  }
+                ]
               },
               {
                 "pattern": "^$",
@@ -105,7 +115,7 @@
       },
       "additional": {
         "set": "addresses",
-        "field": "number"
+        "field": "additional"
       },
       "line1": {
         "set": "addresses",
@@ -128,6 +138,8 @@
         "street",
         "number",
         "additional",
+        "line1",
+        "line2",
         "canonical",
         "fitConfidence"
       ],

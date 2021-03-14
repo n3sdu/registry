@@ -1,0 +1,165 @@
+# Contract for address normalization and existence-checking
+
+id: address-normalizer
+
+content: |
+  # address-normalization
+
+  SDU contract for address normalization and plausbilization.
+
+  ## Synopsis
+
+  The `address-normalizer` contract allows the normalization of a given address to a canonical format.
+  Both western-style street/number/additional styled addresses and generic two-line addresses are supported.
+  The addresses physical existence can be checked.
+
+  ## Definitions
+
+  The keywords *MUST*, *MUST NOT*, *REQUIRED*, *SHALL*, *SHALL NOT*, *SHOULD*, *SHOULD NOT*, *RECOMMENDED*,  *MAY*, and
+  *OPTIONAL* in this document are to be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
+
+  ## Inputs
+
+  ### `country`
+
+  In group: `main`
+
+  The address' country or autonomous region.
+  *MUST* be given as either an ISO country code, international name or countrie's own name.
+
+  ### `state`
+
+  In group: `main`
+
+  The address' state or larger-scale governmental district, if applicable.
+
+  ### `zip`
+
+  In group: `main`
+
+  The address' ZIP or postal code, if applicable.
+
+  ### `city`
+
+  In group: `main`
+
+  The address' city or general muncipal region, if applicable.
+
+  ### `street`
+
+  In group: `main`
+
+  The address' street, if the western address style is used.
+
+  ### `number`
+
+  In group: `main`
+
+  The address' number, if the western address style is used.
+  The number can include suffixes and is generally not required to be numeric.
+
+  ### `additional`
+
+  In group: `main`
+
+  The address' additional properties, if the western address style is used.
+
+  ### `line1`
+
+  In group: `main`
+
+  The address' first line, if generic address style is used.
+
+  ### `line2`
+
+  In group: `main`
+
+  Additional secondary address line, regardless of the style being used.
+
+  ## Outputs
+
+  ### One for every input
+
+  In group: `main`
+
+  For each aforementioned input, there is a corresponding output with the same name in the same group.
+  Those will contain the post-normalization and possibly enriched values after being processed
+
+  ### `canonical`
+
+  In group: `main`
+
+  This output receives the full address in a region-dependent canonical format.
+
+  ### `fitConfidence`
+
+  In group: `main`
+
+  This output receives a textual representation of the confidence of the correctness of the fit and physical comparison.
+  A conforming implementation *MUST* output one of `none`, `low`, `medium`, `high` with the meaning as defined below.
+
+  ## Functionality
+
+  ### Configuration
+
+  No configuration is supported.
+  A conforming implementation *MAY* support additional configuration and *SHOULD* discard unknown/unused values.
+
+  ### Preconditions
+
+  `country` is non-empty and given in a supported format as defined above.
+  At least one of `line1`, `street`, or `number` is given.
+
+  ### Process
+
+  All non-empty input fields are being taken into consideration to build an internal representation of the address.
+  A conforming implementation *MUST* support any combination of empty and non-empty fields that still conforms to the
+  preconditions as defined above.
+  It *SHOULD* give precedence to `line1` over its split pendant if both are given but *MAY* take those fields into
+  consideration for validation purposes.
+
+  An implementation-defined check against physical address locations *SHOULD* be performed, supplementing the internal
+  representation in the process.
+
+  From the given internal state a region-specific canonical format *SHOULD* be determined with fallback to an
+  implementation-defined format.
+  The outputs corresponding to the inputs *MUST* be filled back in from the internal state.
+  `country` *MUST* be represented as an ISO country code.
+  An implementation *SHOULD* attempt to fill in `street`, `number`, and `additional` if the generic format was used and
+  such a representation is applicable for the given region.
+  `canonical` *MUST* be filled in according to the determined format with missing parts reperesented as an empty string.
+
+  An implementation-defined heuristic *SHOULD* be used to compare non-empty inputs to the corresponding outputs
+  and detect unexpected deviations.
+  The heuristic *SHOULD* take into account semantic equivalence, such as `Germany` and `DE` for `country` or `Musterstr.`
+  and `Musterstaße` for `street`.
+
+  For `fitConfidence`, output according to the following rules, processing them in order:
+  1. `high` if normalization worked, no major deviations were found, and a corresponding physical address exists.
+  2. `none` if normalization failed, or the canonical address is missing data.
+  3. `low` if major deviations between the non-empty inputs and normalized outputs were detected.
+  4. `medium` in every other case.
+
+inputs:
+  country: { group: main }
+  state: { group: main }
+  zip: { group: main }
+  city: { group: main }
+  street: { group: main }
+  number: { group: main }
+  additional: { group: main }
+  line1: { group: main }
+  line2: { group: main }
+outputs:
+  # normalized outputs
+  country: { group: main }
+  state: { group: main }
+  zip: { group: main }
+  city: { group: main }
+  street: { group: main }
+  number: { group: main }
+  additional: { group: main }
+  line1: { group: main }
+  line2: { group: main }
+  canonical: { group: main } # canonical full address
+  fitConfidence: { group: main }
