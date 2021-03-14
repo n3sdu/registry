@@ -3,7 +3,96 @@
 id: address-geocoder
 
 content: |
-  Some content sadf
+  # address-geocoder
 
-inputs: {}
-outputs: {}
+  SDU contract for address geocoding.
+
+  ## Synopsis
+
+  The `address-geocoder` contract allows the mapping of an address given in canonical form to a pair of geo coordinates.
+  Multiple coordinate projections are supported, and the localization accuracy in meters is given.
+
+  ## Definitions
+
+  The keywords *MUST*, *MUST NOT*, *REQUIRED*, *SHALL*, *SHALL NOT*, *SHOULD*, *SHOULD NOT*, *RECOMMENDED*,  *MAY*, and
+  *OPTIONAL* in this document are to be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
+
+  *geocoding* within this document refers to the process of assigning location (two-dimensional, i.e. at earth's surface)
+  to an address given in canonical readable text form.
+
+  *floating-point number* refers to the text representation of a number with an arbitrary precision.
+  It MUST be a valid number literal according to the [JSON specification](https://tools.ietf.org/html/std90).
+
+  *integer* referes to the text representation of an integer number, i.e. without decimal places.
+  It MUST be a valid number literal according to the [JSON specification](https://tools.ietf.org/html/std90) and
+  *MUST NOT* have a decimal separator or exponential indicator
+
+  ## Inputs
+
+  ### `address`
+
+  In group: `main`
+
+  This input receives the address to be geocoded. It *MUST* be given in canonical form.
+  *Canonical* refers to the most specified representation of the address in the way it would normally be written for a
+  given country or region.
+
+  ## Outputs
+
+  ### `x`
+
+  In group: `main`
+
+  This output receives the first coordinate of the output pair.
+  A conforming implementation *MUST* always output a valid *floating-point number*.
+
+  ### `y`
+
+  In group: `main`
+
+  This output receives the second coordinate of the output pair.
+  A conforming implementation *MUST* always output a valid *floating-point number*.
+
+  ### `localizationAccuracy`
+
+  In group: `main`
+
+  This output receives the estimated accuracy of the localization result in meters.
+  A conforming implementation *MUST* always output a valid *integer*.
+  The output value *MUST* be `-1` or non-negative.
+
+  ## Functionality
+
+  ### Configuration
+
+  A JSON object *MAY* be given as the configuration field when instantiating the contract.
+  The configuration object *MAY* contain a `projection` attribute with a string value that refers to a coordinate
+  projection to be used for the x/y outputs.
+
+  A conforming implementation *MUST* support `EPSG:4326` (latitude and longitude on the WGS84 geoid) and `EPSG:3857`
+  (Google Maps' metric pseudo mercator).
+  `EPSG:3857` *MUST* be assumed as the requested projection, if none is supplied.
+  An implementation *MAY* support additional projections and should document so accordingly.
+
+  ### Preconditions
+
+  `address` is non-empty and given in canonical form.
+
+  ### Process
+
+  The value given in `address` is used to determine a pair of surface coordinates in an implementation-defined manner.
+  If a coordinate pair was successfully obtained, it *MUST* transformed to the requested output projection.
+  `x` and `y` *MUST* be set to the transformed output coordinate pair's first and second coordinate respectively.
+  `localizationAccuracy` *MUST* be set to a positive value to indicate the quality of the geolocation.
+  The value *SHOULD* refer to the radius of a circular vacinity around the location, within which the actual physical
+  address is to be found with reasonable confidence.
+
+  If the geolocation failed, `localizationAccuracy` *MUST* be set to `-1` to indicate failure.
+  `x` and `y` *SHOULD* be set to `0` or a value generally distinguishable from valid data.
+
+inputs:
+  address: { group: main } # Address in canonical format
+outputs:
+  x: { group: main } # or latitude
+  y: { group: main } # or longitude
+  localizationAccuracy: { group: main } # in metres; -1 if not found

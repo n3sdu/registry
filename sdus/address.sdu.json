@@ -7,7 +7,7 @@
       "city",
       "street",
       "number",
-      "numberext",
+      "additional",
       "line1",
       "line2"
     ]
@@ -48,7 +48,7 @@
                 "pattern": "^$",
                 "target": {
                   "set": "addresses",
-                  "field": "numberext"
+                  "field": "additional"
                 }
               }
             ]
@@ -103,7 +103,7 @@
         "set": "addresses",
         "field": "number"
       },
-      "numberext": {
+      "additional": {
         "set": "addresses",
         "field": "number"
       },
@@ -127,7 +127,7 @@
         "city",
         "street",
         "number",
-        "numberext",
+        "additional",
         "canonical",
         "fitConfidence"
       ],
@@ -156,7 +156,7 @@
           "set": "addresses",
           "field": "number"
         },
-        "numberext": {
+        "additional": {
           "set": "addresses",
           "field": "number"
         },
@@ -204,7 +204,7 @@
             "city",
             "street",
             "number",
-            "numberext",
+            "additional",
             "line1",
             "line2"
           ]
