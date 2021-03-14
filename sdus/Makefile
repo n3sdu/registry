@@ -3,7 +3,7 @@
 YQ ?= yq
 # remove all files command
 RMALL ?= $(if $(filter $(OS),Windows_NT),del /F/Q,rm -f)
-VALIDATE ?= docker run --rm -it -v "$(pwd):/data:ro" -v "$(pwd)/../schema:/schema:ro" jonasprogrammer/json-schema-validator
+VALIDATE ?= docker run --rm -v "$(CURDIR):/data:ro" -v "$(CURDIR)/../schema:/schema:ro" jonasprogrammer/json-schema-validator
 VALIDATE_MAPPINGS ?= $(foreach file,$(wildcard ../schema/*.schema.json), -m "http://n3sdu.github.io/r/schema/$(notdir $(file))=$(file)")
 
 ### Definitions
