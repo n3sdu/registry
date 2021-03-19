@@ -25,7 +25,7 @@ content: |
   In group: `main`
 
   The address' country or autonomous region.
-  *MUST* be given as either an ISO country code, international name or countrie's own name.
+  *MUST* be given as either an ISO country code, international name or country's own name.
 
   ### `state`
 
