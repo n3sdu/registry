@@ -129,7 +129,7 @@
   },
   "functional": {
     "_normalized": {
-      "priority": 0,
+      "priority": 100,
       "output": [
         "country",
         "state",
@@ -143,6 +143,7 @@
         "canonical",
         "fitConfidence"
       ],
+      "extends": "adresses",
       "binding": {
         "country": {
           "set": "addresses",
@@ -184,7 +185,7 @@
       "contract": "address-normalizer"
     },
     "_geocoded": {
-      "priority": 100,
+      "priority": 0,
       "output": [
         "x",
         "y",
@@ -193,6 +194,7 @@
       "extends": "_normalized",
       "binding": {
         "address": {
+          "set": "_normalized",
           "field": "canonical"
         }
       },
