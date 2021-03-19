@@ -54,13 +54,14 @@ plausibility: # Non-existent (according to normalization attempts) addresses are
 
 functional:
   _normalized: # Address normalization
-    priority: 0 # happens first
+    priority: 100 # happens first
     output: [
       # Standard fields (for override)
         country, state, zip, city, street, number, additional, line1, line2,
       # Extended fields
         canonical, fitConfidence
     ]
+    extends: adresses # Extend/override base data
     binding: # Bind all input fields
       country: { set: addresses, field: country }
       state: { set: addresses, field: state }
@@ -73,11 +74,11 @@ functional:
       line2: { set: adrresses, field: line2 }
     contract: address-normalizer
   _geocoded:
-    priority: 100 # Perform after normalization
+    priority: 0 # Perform after normalization
     output: [ x, y, localizationAccuracy ]
     extends: _normalized # Extend normalized datasets
     binding:
-      address: { field: canonical } # geocode canonical address
+      address: { set: _normalized, field: canonical } # geocode canonical address
     contract: address-geocoder
     config: # Example for arbitrary contract config
       spatialReference: EPSG:4326 # output coords in 4326
@@ -113,7 +114,7 @@ visualisation:
           - canonical # display canonical full address
           - x
           - y
-          - fitConfidence # metadata for address usage
+          - fitConfidence # indicate how much result can be trusted
           - localizationAccuracy
         names:
           x: latitude
