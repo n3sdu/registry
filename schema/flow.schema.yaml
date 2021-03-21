@@ -35,8 +35,17 @@ definitions:
       - $ref: 'sdu.schema.json#'
       - properties:
           _standard: { type: string } # resolve standard SDU
+          _sdu: false # mutually exclude
+        required: [ _standard ]
       - properties:
           _sdu: { type: string } # resolve locally (fallback to standard)
+          _stanard: false # mutually exclude
+        required: [ _sdu ]
+    propertyNames:
+      anyOf:
+        - enum: [ _sdu, _standard ]
+        - $ref: 'common.schema.json#/definitions/vendorProps'
+        - $ref: 'sdu.schema.json#/propertyNames'
   fieldRefBinding: # field value source
     type: object
     properties:

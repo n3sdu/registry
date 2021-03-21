@@ -79,17 +79,41 @@
           "properties": {
             "_standard": {
               "type": "string"
-            }
-          }
+            },
+            "_sdu": false
+          },
+          "required": [
+            "_standard"
+          ]
         },
         {
           "properties": {
             "_sdu": {
               "type": "string"
-            }
-          }
+            },
+            "_stanard": false
+          },
+          "required": [
+            "_sdu"
+          ]
         }
-      ]
+      ],
+      "propertyNames": {
+        "anyOf": [
+          {
+            "enum": [
+              "_sdu",
+              "_standard"
+            ]
+          },
+          {
+            "$ref": "common.schema.json#/definitions/vendorProps"
+          },
+          {
+            "$ref": "sdu.schema.json#/propertyNames"
+          }
+        ]
+      }
     },
     "fieldRefBinding": {
       "type": "object",
