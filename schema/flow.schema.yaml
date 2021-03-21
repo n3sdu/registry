@@ -1,4 +1,4 @@
-$id: 'http://n3sdu.github.io/r/schema/2pmap.vis.schema.json'
+$id: 'http://n3sdu.github.io/r/schema/flow.schema.json'
 type: object
 properties:
   additionalContracts: # e.g. for inline sdus
