@@ -1,4 +1,4 @@
-$id: "http://n3sdu.github.io/r/schema/2pmap.vis.schema.json"
+$id: 'http://n3sdu.github.io/r/schema/2pmap.vis.schema.json'
 type: object
 properties:
   _type: { const: '2pmap' } # 2-dim point map

@@ -4,6 +4,15 @@
     "vendorProps": {
       "pattern": "^_vnd_\\w+_.*$"
     },
+    "fieldSet": {
+      "type": "array",
+      "uniqueItems": true,
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": ".+"
+      }
+    },
     "fieldRef": {
       "type": "object",
       "properties": {

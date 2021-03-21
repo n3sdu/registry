@@ -1,0 +1,63 @@
+$id: 'http://n3sdu.github.io/r/schema/2pmap.vis.schema.json'
+type: object
+properties:
+  additionalContracts: # e.g. for inline sdus
+    type: array
+    items: { $ref: 'contract.schema.json#' }
+  additionalSdus: # aliased SDU definitions
+    type: object
+    additionalProperties: { $ref: '#/definitions/sduOrRef' }
+  sources: # data source definitions
+    type: object
+    additionalProperties: { $ref: '#/definitions/dataSource' }
+  flow:
+    type: object
+    additionalProperties: { $ref: '#/definitions/flowElement' }
+required: [ flow ]
+propertyNames:
+  anyOf:
+    - enum: [ additionalContracts, additionalSdus, sources, flow ]
+    - $ref: 'common.schema.json#/definitions/vendorProps'
+definitions:
+  dataSource: # data source description
+    type: object
+    properties:
+      fields: # fields provided by data source
+        $ref: 'common.schema.json#/definitions/fieldSet'
+    required: [ fields ]
+    propertyNames:
+      anyOf:
+        - enum: [ fields ]
+        - $ref: 'common.schema.json#/definitions/vendorProps'
+  sduOrRef: # inline defined SDU or reference
+    type: object
+    oneOf:
+      - $ref: 'sdu.schema.json#'
+      - properties:
+          _standard: { type: string } # resolve standard SDU
+      - properties:
+          _sdu: { type: string } # resolve locally (fallback to standard)
+  fieldRefBinding: # field value source
+    type: object
+    properties:
+      field:
+        $ref: 'common.schema.json#/definitions/fieldRef'
+      part: # referenced flow part
+        oneOf:
+          - type: 'null' # -> look up in sources
+          - type: string # -> resolve from flow
+  flowElement: # bound SDU as part of data flow
+    type: object
+    properties:
+      sdu: { $ref: '#/definitions/sduOrRef' }
+      inputs: # input bindings
+        type: object
+        additionalProperties: # key == input set name
+          type: object
+          additionalPoperties: # key == field name
+            $ref: '#/definitions/fieldRefBinding'
+    required: [ sdu, inputs ]
+    propertyNames:
+      anyOf:
+        - enum: [ sdu, inputs ]
+        - $ref: 'common.schema.json#/definitions/vendorProps'

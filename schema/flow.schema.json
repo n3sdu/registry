@@ -1,0 +1,147 @@
+{
+  "$id": "http://n3sdu.github.io/r/schema/2pmap.vis.schema.json",
+  "type": "object",
+  "properties": {
+    "additionalContracts": {
+      "type": "array",
+      "items": {
+        "$ref": "contract.schema.json#"
+      }
+    },
+    "additionalSdus": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/sduOrRef"
+      }
+    },
+    "sources": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/dataSource"
+      }
+    },
+    "flow": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/flowElement"
+      }
+    }
+  },
+  "required": [
+    "flow"
+  ],
+  "propertyNames": {
+    "anyOf": [
+      {
+        "enum": [
+          "additionalContracts",
+          "additionalSdus",
+          "sources",
+          "flow"
+        ]
+      },
+      {
+        "$ref": "common.schema.json#/definitions/vendorProps"
+      }
+    ]
+  },
+  "definitions": {
+    "dataSource": {
+      "type": "object",
+      "properties": {
+        "fields": {
+          "$ref": "common.schema.json#/definitions/fieldSet"
+        }
+      },
+      "required": [
+        "fields"
+      ],
+      "propertyNames": {
+        "anyOf": [
+          {
+            "enum": [
+              "fields"
+            ]
+          },
+          {
+            "$ref": "common.schema.json#/definitions/vendorProps"
+          }
+        ]
+      }
+    },
+    "sduOrRef": {
+      "type": "object",
+      "oneOf": [
+        {
+          "$ref": "sdu.schema.json#"
+        },
+        {
+          "properties": {
+            "_standard": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "properties": {
+            "_sdu": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "fieldRefBinding": {
+      "type": "object",
+      "properties": {
+        "field": {
+          "$ref": "common.schema.json#/definitions/fieldRef"
+        },
+        "part": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    "flowElement": {
+      "type": "object",
+      "properties": {
+        "sdu": {
+          "$ref": "#/definitions/sduOrRef"
+        },
+        "inputs": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalPoperties": {
+              "$ref": "#/definitions/fieldRefBinding"
+            }
+          }
+        }
+      },
+      "required": [
+        "sdu",
+        "inputs"
+      ],
+      "propertyNames": {
+        "anyOf": [
+          {
+            "enum": [
+              "sdu",
+              "inputs"
+            ]
+          },
+          {
+            "$ref": "common.schema.json#/definitions/vendorProps"
+          }
+        ]
+      }
+    }
+  }
+}

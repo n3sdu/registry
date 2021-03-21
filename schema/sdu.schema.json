@@ -6,7 +6,7 @@
       "type": "object",
       "patternProperties": {
         "^[^_].*$": {
-          "$ref": "#/definitions/fieldSet"
+          "$ref": "common.schema.json#/definitions/fieldSet"
         }
       },
       "propertyNames": {
@@ -102,15 +102,6 @@
     ]
   },
   "definitions": {
-    "fieldSet": {
-      "type": "array",
-      "uniqueItems": true,
-      "minItems": 1,
-      "items": {
-        "type": "string",
-        "pattern": ".+"
-      }
-    },
     "fieldRef": {
       "$ref": "common.schema.json#/definitions/fieldRef"
     },
@@ -124,7 +115,7 @@
           "type": "string"
         },
         "output": {
-          "$ref": "#/definitions/fieldSet"
+          "$ref": "common.schema.json#/definitions/fieldSet"
         },
         "extends": {
           "type": "string"

@@ -1,4 +1,4 @@
-$id: "http://n3sdu.github.io/r/schema/table.vis.schema.json"
+$id: 'http://n3sdu.github.io/r/schema/table.vis.schema.json'
 type: object
 properties:
   _type: { const: 'contract' }

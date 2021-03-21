@@ -1,11 +1,18 @@
-$id: "http://n3sdu.github.io/r/schema/common.schema.json"
+$id: 'http://n3sdu.github.io/r/schema/common.schema.json'
 definitions:
   vendorProps: # vendor-specific property names
     # vendor prefix: '_vnd_' + 1+ alnum/_ + '_'
     pattern: '^_vnd_\w+_.*$'
 
-  # Used for referencing fields within the SDU
-  fieldRef:
+  fieldSet: # fields within a set
+    type: array
+    uniqueItems: true
+    minItems: 1
+    items:
+      type: string
+      pattern: '.+' # len at least 1
+
+  fieldRef: # reference to other fields
     type: object
     properties:
       field: { type: string }

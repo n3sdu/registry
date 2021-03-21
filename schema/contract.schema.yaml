@@ -1,4 +1,4 @@
-$id: "http://n3sdu.github.io/r/schema/contract.schema.json"
+$id: 'http://n3sdu.github.io/r/schema/contract.schema.json'
 type: object
 properties:
   id: { $ref: '#/definitions/contractId' }

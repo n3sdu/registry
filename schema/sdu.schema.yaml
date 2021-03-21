@@ -1,11 +1,11 @@
-$id: "http://n3sdu.github.io/r/schema/sdu.schema.json"
+$id: 'http://n3sdu.github.io/r/schema/sdu.schema.json'
 type: object
 properties:
   input:
     type: object
     patternProperties:
       # Regular entries must not start with _ and be a valid fieldSet
-      '^[^_].*$': { $ref: '#/definitions/fieldSet' }
+      '^[^_].*$': { $ref: 'common.schema.json#/definitions/fieldSet' }
     propertyNames:
       anyOf:
         - $ref: 'common.schema.json#/definitions/vendorProps'
@@ -42,14 +42,6 @@ propertyNames:
     - $ref: 'common.schema.json#/definitions/vendorProps'
     - enum: [ input, functional, validation, plausibility, visualisation ]
 definitions:
-  # Used for inputs, outputs
-  fieldSet:
-    type: array
-    uniqueItems: true
-    minItems: 1
-    items:
-      type: string
-      pattern: ".+" # len at least 1
   # Used for referencing fields within the SDU
   fieldRef:
     $ref: 'common.schema.json#/definitions/fieldRef'
@@ -59,7 +51,7 @@ definitions:
     properties:
       contract: { type: string }
       instance: { type: string }
-      output: { $ref: '#/definitions/fieldSet' }
+      output: { $ref: 'common.schema.json#/definitions/fieldSet' }
       extends: { type: string }
       binding:
         type: object
