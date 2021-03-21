@@ -55,6 +55,11 @@ definitions:
         oneOf:
           - type: 'null' # -> look up in sources
           - type: string # -> resolve from flow
+    required: [ field ]
+    propertyNames:
+      anyOf:
+        - enum: [ field, part ]
+        - $ref: 'common.schema.json#/definitions/vendorProps'
   flowElement: # bound SDU as part of data flow
     type: object
     properties:
@@ -63,7 +68,7 @@ definitions:
         type: object
         additionalProperties: # key == input set name
           type: object
-          additionalPoperties: # key == field name
+          additionalProperties: # key == field name
             $ref: '#/definitions/fieldRefBinding'
     required: [ sdu, inputs ]
     propertyNames:

@@ -131,6 +131,22 @@
             }
           ]
         }
+      },
+      "required": [
+        "field"
+      ],
+      "propertyNames": {
+        "anyOf": [
+          {
+            "enum": [
+              "field",
+              "part"
+            ]
+          },
+          {
+            "$ref": "common.schema.json#/definitions/vendorProps"
+          }
+        ]
       }
     },
     "flowElement": {
@@ -143,7 +159,7 @@
           "type": "object",
           "additionalProperties": {
             "type": "object",
-            "additionalPoperties": {
+            "additionalProperties": {
               "$ref": "#/definitions/fieldRefBinding"
             }
           }
