@@ -110,7 +110,7 @@
             "$ref": "common.schema.json#/definitions/vendorProps"
           },
           {
-            "$ref": "sdu.schema.json#/propertyNames"
+            "$ref": "sdu.schema.json#/definitions/sduPropertyNames"
           }
         ]
       }

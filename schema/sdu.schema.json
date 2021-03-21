@@ -86,22 +86,25 @@
     }
   },
   "propertyNames": {
-    "anyOf": [
-      {
-        "$ref": "common.schema.json#/definitions/vendorProps"
-      },
-      {
-        "enum": [
-          "input",
-          "functional",
-          "validation",
-          "plausibility",
-          "visualisation"
-        ]
-      }
-    ]
+    "$ref": "#/definitions/sduPropertyNames"
   },
   "definitions": {
+    "sduPropertyNames": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/definitions/vendorProps"
+        },
+        {
+          "enum": [
+            "input",
+            "functional",
+            "validation",
+            "plausibility",
+            "visualisation"
+          ]
+        }
+      ]
+    },
     "fieldRef": {
       "$ref": "common.schema.json#/definitions/fieldRef"
     },

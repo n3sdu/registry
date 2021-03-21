@@ -38,10 +38,13 @@ properties:
           - enum: [ caption, display ]
           - $ref: 'common.schema.json#/definitions/vendorProps'
 propertyNames:
-  anyOf:
-    - $ref: 'common.schema.json#/definitions/vendorProps'
-    - enum: [ input, functional, validation, plausibility, visualisation ]
+  $ref: '#/definitions/sduPropertyNames'
 definitions:
+  sduPropertyNames: # under /definitions to allow cross-reference
+    anyOf:
+      - $ref: 'common.schema.json#/definitions/vendorProps'
+      - enum: [ input, functional, validation, plausibility, visualisation ]
+
   # Used for referencing fields within the SDU
   fieldRef:
     $ref: 'common.schema.json#/definitions/fieldRef'
