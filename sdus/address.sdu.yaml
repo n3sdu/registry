@@ -50,7 +50,7 @@ plausibility: # Non-existent (according to normalization attempts) addresses are
     number: { set: addresses, field: number }
     additional: { set: addresses, field: additional }
     line1: { set: addresses, field: line1 }
-    line2: { set: adrresses, field: line2 }
+    line2: { set: addresses, field: line2 }
 
 functional:
   _normalized: # Address normalization
@@ -61,7 +61,7 @@ functional:
       # Extended fields
         canonical, fitConfidence
     ]
-    extends: adresses # Extend/override base data
+    extends: addresses # Extend/override base data
     binding: # Bind all input fields
       country: { set: addresses, field: country }
       state: { set: addresses, field: state }
@@ -71,7 +71,7 @@ functional:
       number: { set: addresses, field: number }
       additional: { set: addresses, field: number }
       line1: { set: addresses, field: line1 }
-      line2: { set: adrresses, field: line2 }
+      line2: { set: addresses, field: line2 }
     contract: address-normalizer
   _geocoded:
     priority: 0 # Perform after normalization
