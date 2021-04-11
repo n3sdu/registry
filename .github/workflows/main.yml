@@ -78,4 +78,4 @@ jobs:
           workflow: update-registry
           ref: master
           repo: n3sdu/n3sdu.github.io
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.WORKFLOW_TRIGGER_PAT }}
