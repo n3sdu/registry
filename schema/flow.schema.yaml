@@ -39,7 +39,7 @@ definitions:
         required: [ _standard ]
       - properties:
           _sdu: { type: string } # resolve locally (fallback to standard)
-          _stanard: false # mutually exclude
+          _standard: false # mutually exclude
         required: [ _sdu ]
     propertyNames:
       anyOf:
