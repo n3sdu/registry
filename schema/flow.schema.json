@@ -91,7 +91,7 @@
             "_sdu": {
               "type": "string"
             },
-            "_stanard": false
+            "_standard": false
           },
           "required": [
             "_sdu"
