@@ -145,9 +145,9 @@ inputs:
   state: { group: main }
   zip: { group: main }
   city: { group: main }
-  street: { group: main }
-  number: { group: main }
-  additional: { group: main }
+  street: { group: main, unboundDefault: ''}
+  number: { group: main, unboundDefault: ''}
+  additional: { group: main, unboundDefault: ''}
   line1: { group: main }
   line2: { group: main }
 outputs:

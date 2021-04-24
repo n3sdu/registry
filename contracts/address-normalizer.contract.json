@@ -15,13 +15,16 @@
       "group": "main"
     },
     "street": {
-      "group": "main"
+      "group": "main",
+      "unboundDefault": ""
     },
     "number": {
-      "group": "main"
+      "group": "main",
+      "unboundDefault": ""
     },
     "additional": {
-      "group": "main"
+      "group": "main",
+      "unboundDefault": ""
     },
     "line1": {
       "group": "main"

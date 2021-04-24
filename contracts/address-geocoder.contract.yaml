@@ -66,7 +66,7 @@ content: |
   ### Configuration
 
   A JSON object *MAY* be given as the configuration field when instantiating the contract.
-  The configuration object *MAY* contain a `projection` attribute with a string value that refers to a coordinate
+  The configuration object *MAY* contain a `spatialReference` attribute with a string value that refers to a coordinate
   projection to be used for the x/y outputs.
 
   A conforming implementation *MUST* support `EPSG:4326` (latitude and longitude on the WGS84 geoid) and `EPSG:3857`
