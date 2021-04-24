@@ -1,0 +1,64 @@
+# Contract for element counting
+
+id: element-counter
+
+inputs:
+  element: { group: 'main' }
+outputs:
+  count: { group: 'main' }
+
+content: |
+  # element-counter
+
+  SDU contract for counting element occurences.
+
+  ## Synopsis
+
+  The `element-counter` contract can be used to count element occurrences in a given data stream. For a given element,
+  it outputs the number of times the element has been seen, starting at 1 for the first occurrence.
+  For example, it could be used to determine element uniqueness by checking its output is always 1.
+
+  ## Definitions
+
+  The keywords *MUST*, *MUST NOT*, *REQUIRED*, *SHALL*, *SHALL NOT*, *SHOULD*, *SHOULD NOT*, *RECOMMENDED*,  *MAY*, and
+  *OPTIONAL* in this document are to be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
+
+  *state* refers to the state of a given instance: It contains a mapping of distinct elements, and the number of times
+  a given element has occured.
+
+  ## Inputs
+
+  ### `element`
+
+  In group: `main`
+
+  The element being processed. The string value is taken as-is, without any requirements or processing done.
+
+  ## Outputs
+
+  ### `count`
+
+  In group: `main`
+
+  The amount of times a given element has occurred.
+
+  ## Functionality
+
+  ### Configuration
+
+  A JSON object *MAY* be given as the configuration field when instantiating the contract.  The configuration object
+  *MAY* contain a `fixed` property, which in turn is a key-value object. The values `fixed` *MUST* be integers.
+
+  ### Preconditions
+
+  None.
+
+  ### Process
+
+  For each value given as `element` do decide:
+
+  If a *configuration* is present, and the value processed is present as a key in `fixed`:
+  Put the value associated with the key into `count`. The internal state *MUST NOT* be changed under these circumstances.
+
+  Otherwise, if the element is present in *state*, add `1` to the number of occurrences and emit that value in `count`.
+  If the element was not previously present, add it to the *state* with an initial value of 1 and emit that in `count`.
