@@ -47,7 +47,7 @@ content: |
   ### Configuration
 
   A JSON object *MAY* be given as the configuration field when instantiating the contract.  The configuration object
-  *MAY* contain a `fixed` property, which in turn is a key-value object. The values `fixed` *MUST* be integers.
+  *MAY* contain a `fixed` property, which in turn is a key-value object. The values `fixed` *MUST* be strings.
 
   ### Preconditions
 
@@ -58,7 +58,8 @@ content: |
   For each value given as `element` do decide:
 
   If a *configuration* is present, and the value processed is present as a key in `fixed`:
-  Put the value associated with the key into `count`. The internal state *MUST NOT* be changed under these circumstances.
+  Put the value associated with the key into `count`.
+  The internal state *MUST NOT* be changed under these circumstances.
 
   Otherwise, if the element is present in *state*, add `1` to the number of occurrences and emit that value in `count`.
   If the element was not previously present, add it to the *state* with an initial value of 1 and emit that in `count`.
